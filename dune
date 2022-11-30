@@ -1,0 +1,12 @@
+(menhir
+ (infer true)
+ (flags -v)
+ (modules mmlparser)
+)
+
+(ocamllex mmllexer)
+
+((executables
+ (names mmlcat mmli)
+ (public_names debug miniml)
+))
