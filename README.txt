@@ -146,6 +146,17 @@ Structures :
                 E |- { x1 = e1; ...; xN = eN; } : s
 
 
+##### Progression #####
+I consider going through this project with the 2nd working-method given by T.Balabonski :
+  Implementing + Testing each line before going to the next one.
+
+           |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
+Arithmetic |         |          |               |               |
+Variables  |         |          |               |               |
+Functions  |         |          |               |               |
+Structures |         |          |               |               |
+Recursion  |         |          |               |               |
+
 ##### in-sighted Extensions #####
 
 Global Analysis improvements such as :
