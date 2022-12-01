@@ -150,12 +150,14 @@ Structures :
 I consider going through this project with the 2nd working-method given by T.Balabonski :
   Implementing + Testing each line before going to the next one.
 
+X : Done (quite sure)
+~ : Not completed (or Done but not sure)
            |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
-Arithmetic |         |          |               |               |
-Variables  |         |          |               |               |
-Functions  |         |          |               |               |
-Structures |         |          |               |               |
-Recursion  |         |          |               |               |
+Arithmetic |    X    |    X     |               |               |
+Variables  |    X    |    X     |               |               |
+Functions  |    X    |    ~     |               |               |
+Structures |    X    |    ~     |               |               |
+Recursion  |    X    |    ~     |               |               |
 
 ##### in-sighted Extensions #####
 
