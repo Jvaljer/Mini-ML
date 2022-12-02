@@ -23,9 +23,34 @@ let type_prog prog =
 
   (* Calculates the Exre [e]'s type *)
   and type_expr e tenv = match e with
+    (* simple cases (enonciated types & Variables)*)
     | Int _  -> TInt
-    | Bop((Add | Mul), e1, e2) -> 
-       check e1 TInt tenv; check e2 TInt tenv; TInt
+    | Bool _ -> TBool
+    | Unit -> TUnit 
+    | Var x -> SymTbl.find x tenv 
+    (* Arithmetic Operands *)
+      (* Unary Operands *)
+    | Uop(Neg, e) -> check e TInt tenv; TInt
+    | Uop(Not, e) -> check e TBool tenv; TBool
+      (* Binary Operands *)
+    | Bop((Add | Mul | Minus | Div | Mod), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TInt
+    | Bop((And | Or), e1, e2) -> check e1 TBool tenv; check e2 TBool tenv; TBool
+    | Bop((Lt | Le), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TBool
+    | Bop((Eq | Neq), e1, e2) -> check e1 (type_expr e2 tenv) tenv; TBool
+    (* Conditions *)
+    | If(c, e1, e2) -> assert false 
+    (* Functions *)
+    | Fun(id, t, e) -> assert false 
+    | Let(id, e1, e2) -> assert false 
+    (* Structures *)
+    | Strct s -> assert false 
+    | GetF(e,id) -> assert false 
+    | SetF(e1, id, e2) -> assert false 
+    (* Fix Point *)
+    | Fix(id, t, e) -> assert false 
+    (* Other cases *)
+    | App(e1, e2) -> assert false 
+    | Seq(e1, e2) -> assert false 
 
   in
 

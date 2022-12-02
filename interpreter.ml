@@ -38,15 +38,32 @@ let eval_prog (p: prog): value =
   (* Interpreting a special Expr, consideratibg the environment + memory within which we wanna interpret it *)
   let rec eval (e: expr) (env: value Env.t): value = 
     match e with
-    | Int n  -> VInt n
-    | Bop(Add, e1, e2) -> VInt (evali e1 env + evali e2 env)
-    | Bop(Mul, e1, e2) -> VInt (evali e1 env * evali e2 env)
+      (* simple cases *)
+      | Int n  -> VInt n
+      | Bool b -> VBool b
+      (* Arithmetic *)
+        (* Unary Operands *)
+      | Uop(Neg, e) -> VInt (evalInt e env)
+      | Uop(Not, e) -> VBool (evalBool e env)
+        (* Binary Operands *)
+      | Bop(Add, e1, e2) -> VInt (evalInt e1 env + evalInt e2 env)
+      | Bop(Mul, e1, e2) -> VInt (evalInt e1 env * evalInt e2 env)
+      | Bop(Minus, e1, e2) -> VInt (evalInt e1 env - evalInt e2 env)
+      | Bop(Div, e1, e2) -> VInt (evalInt e1 env / evalInt e2 env)
+      | Bop(Mod, e1, e2) -> VInt (evalInt e1 env mod evalInt e2 env)
+
+
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
-  and evali (e: expr) (env: value Env.t): int = 
+  and evalInt (e: expr) (env: value Env.t): int = 
     match eval e env with
-    | VInt n -> n
-    | _ -> assert false
+      | VInt n -> n
+      | _ -> assert false
+  (* Interpreting the Expr when it's supposed to be a Boolean *)
+  and evalBool (e: expr) (env: value Env.t): bool =
+    match eval e env with 
+      | VBool b -> b
+      | _ -> assert false 
   in
 
   eval p.code Env.empty
