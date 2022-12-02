@@ -153,8 +153,8 @@ I consider going through this project with the 2nd working-method given by T.Bal
 X : Done (quite sure)
 ~ : Not completed (or Done but not sure)
            |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
-Arithmetic |    X    |    X     |               |               |
-Variables  |    X    |    X     |               |               |
+Arithmetic |    X    |    X     |       X       |      X        |
+Variables  |    X    |    X     |       X       |               |
 Functions  |    X    |    ~     |               |               |
 Structures |    X    |    ~     |               |               |
 Recursion  |    X    |    ~     |               |               |
