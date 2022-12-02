@@ -124,7 +124,7 @@ fun_arg:
   | PLUS  { Add } (* + *)
   | MUL   { Mul } (* * *)
   | MINUS { Minus } (* - *)
-  | DIV   { DIV } (* / *)
+  | DIV   { Div } (* / *)
   | MOD   { Mod } (* mod *)
   | EQ    { Eq } (* == *)
   | NEQ   { Neq } (* != *)
