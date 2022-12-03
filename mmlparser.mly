@@ -65,7 +65,7 @@ typ:
   | TUNIT    { TUnit } (*Unit*)
   | id=IDENT { IDENT(id) } (*Ident*)
   | t1=type RARROW t2=typ 
-             { (*complete*)} (*type -> type*)
+             { TFun(t1, t2) } (*type -> type*)
   | LPAR t=typ RPAR 
              { t } (* ( type ) *)
 ;
@@ -76,10 +76,10 @@ s_expr:
   | b=BOOL   { Bool(b) } (* true & false *)
   | PARS     { Unit } (* () *)
   | x=IDENT { Var(x) } (* ident *)
-  | se=s_expr DOT id=IDENT 
-             { (*complete*) } (* s_expr.ident *)
+  | se=s_expr DOT f=IDENT 
+             { GetF(se, f) } (* s_expr.ident *)
   | LBRACE id_list=nonempty_list(id_def) RBRACE 
-             { (*complete*)} (* { [ident = expr ;]+ } *)
+             { Strct(id_list) } (* { [ident = expr ;]+ } *)
   | LPAR e=expr RPAR 
              { e } (* ( expr ) *)
 ;
@@ -93,8 +93,8 @@ id_def:
 expr:
   | se=s_expr                 { se } (* s_expr *)
   | e1=expr op=binop e2=expr  { Bop(op, e1, e2) } (* expr bop expr *)
-  | op=unop se=s_expr         { Uop(op,se) } (* uop expr *)
-  | e=expr se=s_expr          { (*complete*) } (* expr s_expr *)
+  | op=unop se=s_expr         { Uop(op, se) } (* uop expr *)
+  | e=expr se=s_expr          { App(e, se) } (* expr s_expr *)
   | IF c=expr THEN e=expr     { If(c,e1,Unit) } (* if expr then expr *)
   | IF c=expr THEN e1=expr ELSE e2=expr 
                               { If(c,e1,e2) } (* if expr then expr else expr *)
@@ -102,12 +102,15 @@ expr:
   | FUN f=IDENT RARROW e=expr { Fun(f,_,e) } (* fun ident -> expr *)
   (*must correct these 2*)
   | LET id=IDENT args=list(fun_arg) ASS e1=expr IN e2=expr 
-                              { Let(id,e1,e2) } (* let ident [(ident : type)]* = expr in expr *)
-  | LET REC id=IDENT args=list(fun_arg) COLON e1=expr IN e2=expr 
-                              { Let(id,e1,e2) } (* let rec ident [(ident : type)]* : type = expr in expr *)
-  | se=s_expr DOT x=IDENT LARROW e=expr 
-                              { (*complete*) } (* s_expr.ident <- expr *)
-  | e1=expr SEMI e2=expr      { (*complete*) } (* expr ; expr *)
+                              { let f = mk_fun args e1 in
+                                Let(id, f , e2) } (* let ident [(ident : type)]* = expr in expr *)
+  | LET REC id=IDENT args=list(fun_arg) COLON t=typ ASS e1=expr IN e2=expr 
+                              { let f = mk_fun args e1 in
+                                let fix = Fix(id, t, f) in
+                                Let(id, fix, e2) } (* let rec ident [(ident : type)]* : type = expr in expr *)
+  | se=s_expr DOT f=IDENT LARROW e=expr 
+                              { SetF(se, f, e) } (* s_expr.ident <- expr *)
+  | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
 ;
 
 fun_arg:
