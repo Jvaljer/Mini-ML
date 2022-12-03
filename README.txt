@@ -154,9 +154,9 @@ X : Done (quite sure)
 ~ : Not completed (or Done but not sure)
            |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
 Arithmetic |    X    |    X     |       X       |      X        |
-Variables  |    X    |    X     |       X       |               |
-Functions  |    X    |    ~     |               |               |
-Structures |    X    |    ~     |               |               |
+Variables  |    X    |    X     |       X       |      X        |
+Functions  |    X    |    X     |               |               |
+Structures |    X    |    X     |               |               |
 Recursion  |    X    |    ~     |               |               |
 
 ##### in-sighted Extensions #####
