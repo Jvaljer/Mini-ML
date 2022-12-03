@@ -40,16 +40,16 @@ let type_prog prog =
     (* Conditions *)
     | If(c, e1, e2) -> assert false 
     (* Functions *)
-    | Fun(id, t, e) -> assert false 
+    | Fun(f, t, e) -> assert false 
     | Let(id, e1, e2) -> assert false 
+    | App(e1, e2) -> assert false 
     (* Structures *)
     | Strct s -> assert false 
-    | GetF(e,id) -> assert false 
-    | SetF(e1, id, e2) -> assert false 
+    | GetF(e,f) -> assert false 
+    | SetF(e1, f, e2) -> assert false 
     (* Fix Point *)
-    | Fix(id, t, e) -> assert false 
+    | Fix(f, t, e) -> assert false 
     (* Other cases *)
-    | App(e1, e2) -> assert false 
     | Seq(e1, e2) -> assert false 
 
   in
