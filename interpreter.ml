@@ -41,16 +41,39 @@ let eval_prog (p: prog): value =
       (* simple cases *)
       | Int n  -> VInt n
       | Bool b -> VBool b
+      | Unit -> VUnit 
+      | Var x -> Env.find x env
       (* Arithmetic *)
         (* Unary Operands *)
-      | Uop(Neg, e) -> VInt (evalInt e env)
-      | Uop(Not, e) -> VBool (evalBool e env)
-        (* Binary Operands *)
-      | Bop(Add, e1, e2) -> VInt (evalInt e1 env + evalInt e2 env)
-      | Bop(Mul, e1, e2) -> VInt (evalInt e1 env * evalInt e2 env)
-      | Bop(Minus, e1, e2) -> VInt (evalInt e1 env - evalInt e2 env)
-      | Bop(Div, e1, e2) -> VInt (evalInt e1 env / evalInt e2 env)
-      | Bop(Mod, e1, e2) -> VInt (evalInt e1 env mod evalInt e2 env)
+      | Uop(Neg, e) -> VInt(evalInt e env)
+      | Uop(Not, e) -> VBool(evalBool e env)
+        (* Binary Operands : Arith *)
+      | Bop(Add, e1, e2) -> VInt(evalInt e1 env + evalInt e2 env)
+      | Bop(Mul, e1, e2) -> VInt(evalInt e1 env * evalInt e2 env)
+      | Bop(Minus, e1, e2) -> VInt(evalInt e1 env - evalInt e2 env)
+      | Bop(Div, e1, e2) -> VInt(evalInt e1 env / evalInt e2 env)
+      | Bop(Mod, e1, e2) -> VInt(evalInt e1 env mod evalInt e2 env)
+        (* Binary Operands : Boolean Arith *)
+      | Bop(And, e1, e2) -> VBool(evalBool e1 env && evalBool e2 env)
+      | Bop(Or, e1, e2) -> VBool(evalBool e1 env || evalBool e2 env)
+      | Bop(Lt, e1, e2) -> VBool(evalInt e1 env < evalInt e2 env)
+      | Bop(Le, e1, e2) -> VBool(evalInt e1 env <= evalInt e2 env)
+      | Bop(Eq, e1, e2) -> VBool(evalBool e1 env == evalBool e2 env)
+      | Bop(Neq, e1, e2) -> VBool(eval e1 env != eval e2 env)
+      (* Conditons *)
+      | If(c, e1, e2) -> assert false 
+      (* Functions *)
+      | Fun(f, t, e) -> assert false
+      | Let(id, e1, e2) -> assert false
+      | App(e1, e2) -> assert false 
+      (* Structures *)
+      | Strct s -> assert false 
+      | GetF(e, f) -> assert false
+      | SetF(e1, f , e2) -> assert false 
+      (* Fix Point *)
+      | Fix(f, t, e) -> assert false 
+      (* Sequencies *)
+      | Seq(e1, e2) -> assert false
 
 
 
