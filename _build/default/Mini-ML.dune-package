@@ -1,0 +1,4 @@
+(lang dune 3.5)
+(name Mini-ML)
+(sections (lib .) (bin ../../bin) (doc ../../doc/Mini-ML))
+(files (lib (META dune-package)) (bin (debug miniml)) (doc (README.txt)))

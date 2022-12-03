@@ -6,7 +6,7 @@
 
 (ocamllex mmllexer)
 
-((executables
+(executables
  (names mmlcat mmli)
  (public_names debug miniml)
-))
+)
