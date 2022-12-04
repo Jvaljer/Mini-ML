@@ -38,7 +38,10 @@ let type_prog prog =
     | Bop((Lt | Le), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TBool
     | Bop((Eq | Neq), e1, e2) -> check e1 (type_expr e2 tenv) tenv; TBool
     (* Conditions *)
-    | If(c, e1, e2) -> assert false 
+    | If(c, e1, e2) -> check c TBool tenv; 
+                       let t1 = type_expr e1 tenv in
+                       check e2 t1 tenv;
+                       t1 (* and what if we want 2 different typed expr *)
     (* Functions *)
     | Fun(f, t, e) -> assert false 
     | Let(id, e1, e2) -> assert false 
@@ -50,7 +53,8 @@ let type_prog prog =
     (* Fix Point *)
     | Fix(f, t, e) -> assert false 
     (* Other cases *)
-    | Seq(e1, e2) -> assert false 
+    | Seq(e1, e2) -> let t1 = type_expr e1 tenv in
+                     type_expr e2 tenv;
 
   in
 

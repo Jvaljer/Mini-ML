@@ -61,7 +61,7 @@ let eval_prog (p: prog): value =
       | Bop(Eq, e1, e2) -> VBool(evalBool e1 env == evalBool e2 env)
       | Bop(Neq, e1, e2) -> VBool(eval e1 env != eval e2 env)
       (* Conditons *)
-      | If(c, e1, e2) -> assert false 
+      | If(c, e1, e2) -> if VBool(evalBool c env) then eval e1 env else eval e2 env
       (* Functions *)
       | Fun(f, t, e) -> assert false
       | Let(id, e1, e2) -> assert false
@@ -71,9 +71,10 @@ let eval_prog (p: prog): value =
       | GetF(e, f) -> assert false
       | SetF(e1, f , e2) -> assert false 
       (* Fix Point *)
-      | Fix(f, t, e) -> assert false 
+      | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
       (* Sequencies *)
-      | Seq(e1, e2) -> assert false
+      | Seq(e1, e2) -> let val = eval e1 env in 
+                       eval e2 env; 
 
 
 
