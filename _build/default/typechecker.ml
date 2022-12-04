@@ -2,8 +2,8 @@
 open Mml
 
 (* Typing Environment : matching types with used variables *)
-module SymTbl = Map.Make(String)
-type tenv = typ SymTbl.t
+module TypEnv = Map.Make(String)
+type tenv = typ TypEnv.t
 
 (* Errors we are allowing (and perhaps wanting) to occure *)
 exception Type_error of string
@@ -27,7 +27,7 @@ let type_prog prog =
     | Int _  -> TInt
     | Bool _ -> TBool
     | Unit -> TUnit 
-    | Var x -> SymTbl.find x tenv 
+    | Var x -> TypEnv.find x tenv 
     (* Arithmetic Operands *)
       (* Unary Operands *)
     | Uop(Neg, e) -> check e TInt tenv; TInt
@@ -38,11 +38,18 @@ let type_prog prog =
     | Bop((Lt | Le), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TBool
     | Bop((Eq | Neq), e1, e2) -> check e1 (type_expr e2 tenv) tenv; TBool
     (* Conditions *)
-    | If(c, e1, e2) -> assert false 
+    | If(c, e1, e2) -> check c TBool tenv; 
+                       let t1 = type_expr e1 tenv in
+                       check e2 t1 tenv;
+                       t1 (* and what if we want 2 different typed expr *)
     (* Functions *)
-    | Fun(f, t, e) -> assert false 
-    | Let(id, e1, e2) -> assert false 
-    | App(e1, e2) -> assert false 
+    | Fun(f, t, e) -> (* we want to recognize the f-called function as t-typed -> add it to the Env*)
+                      let t' = type_expr e (TypEnv.add f t tenv) in
+                      TFun(t,t');
+    | Let(id, e1, e2) -> (* same idea but must 'create' the type first*)
+                         let t = type_expr e1 tenv in
+                         type_expr e2 (TypEnv.add id t tenv) 
+    | App(e1, e2) -> (* what does App() is doing exactly *) assert false 
     (* Structures *)
     | Strct s -> assert false 
     | GetF(e,f) -> assert false 
@@ -50,8 +57,9 @@ let type_prog prog =
     (* Fix Point *)
     | Fix(f, t, e) -> assert false 
     (* Other cases *)
-    | Seq(e1, e2) -> assert false 
+    | Seq(e1, e2) -> let _ = type_expr e1 tenv in
+                     type_expr e2 tenv;
 
   in
 
-  type_expr prog.code SymTbl.empty
+  type_expr prog.code TypEnv.empty

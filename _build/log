@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_b87758_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_0c0adc_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -152,7 +152,53 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_b87758_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl interpreter.ml) > _build/default/.mmlcat.eobjs/interpreter.ml.d
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
+> File "typechecker.ml", line 52, characters 10-12:
+> 52 |     | App(e1, e2) -> (* what does App() is doing exactly *) assert false 
+>                ^^
+> Error (warning 27 [unused-var-strict]): unused variable e1.
+> File "typechecker.ml", line 52, characters 14-16:
+> 52 |     | App(e1, e2) -> (* what does App() is doing exactly *) assert false 
+>                    ^^
+> Error (warning 27 [unused-var-strict]): unused variable e2.
+> File "typechecker.ml", line 54, characters 12-13:
+> 54 |     | Strct s -> assert false 
+>                  ^
+> Error (warning 27 [unused-var-strict]): unused variable s.
+> File "typechecker.ml", line 55, characters 11-12:
+> 55 |     | GetF(e,f) -> assert false 
+>                 ^
+> Error (warning 27 [unused-var-strict]): unused variable e.
+> File "typechecker.ml", line 55, characters 13-14:
+> 55 |     | GetF(e,f) -> assert false 
+>                   ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "typechecker.ml", line 56, characters 11-13:
+> 56 |     | SetF(e1, f, e2) -> assert false 
+>                 ^^
+> Error (warning 27 [unused-var-strict]): unused variable e1.
+> File "typechecker.ml", line 56, characters 15-16:
+> 56 |     | SetF(e1, f, e2) -> assert false 
+>                     ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "typechecker.ml", line 56, characters 18-20:
+> 56 |     | SetF(e1, f, e2) -> assert false 
+>                        ^^
+> Error (warning 27 [unused-var-strict]): unused variable e2.
+> File "typechecker.ml", line 58, characters 10-11:
+> 58 |     | Fix(f, t, e) -> assert false 
+>                ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "typechecker.ml", line 58, characters 13-14:
+> 58 |     | Fix(f, t, e) -> assert false 
+>                   ^
+> Error (warning 27 [unused-var-strict]): unused variable t.
+> File "typechecker.ml", line 58, characters 16-17:
+> 58 |     | Fix(f, t, e) -> assert false 
+>                      ^
+> Error (warning 27 [unused-var-strict]): unused variable e.
+[2]
 $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Interpreter.cmo -c -impl interpreter.ml)
 > File "interpreter.ml", line 30, characters 7-10:
 > 30 |   let (mem: (int, heap_value) Hashtbl.t) = Hashtbl.create 16 in
@@ -162,48 +208,24 @@ $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..
 > 33 |   let new_ptr =
 >            ^^^^^^^
 > Error (warning 26 [unused-var]): unused variable new_ptr.
-> File "interpreter.ml", line 64, characters 11-12:
-> 64 |       | If(c, e1, e2) -> assert false 
->                 ^
-> Error (warning 27 [unused-var-strict]): unused variable c.
-> File "interpreter.ml", line 64, characters 14-16:
-> 64 |       | If(c, e1, e2) -> assert false 
->                    ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "interpreter.ml", line 64, characters 18-20:
-> 64 |       | If(c, e1, e2) -> assert false 
->                        ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
 > File "interpreter.ml", line 66, characters 12-13:
-> 66 |       | Fun(f, t, e) -> assert false
+> 66 |       | Fun(f, t, e) -> (* not as simple as Let() ... *) assert false 
 >                  ^
 > Error (warning 27 [unused-var-strict]): unused variable f.
 > File "interpreter.ml", line 66, characters 15-16:
-> 66 |       | Fun(f, t, e) -> assert false
+> 66 |       | Fun(f, t, e) -> (* not as simple as Let() ... *) assert false 
 >                     ^
 > Error (warning 27 [unused-var-strict]): unused variable t.
 > File "interpreter.ml", line 66, characters 18-19:
-> 66 |       | Fun(f, t, e) -> assert false
+> 66 |       | Fun(f, t, e) -> (* not as simple as Let() ... *) assert false 
 >                        ^
 > Error (warning 27 [unused-var-strict]): unused variable e.
-> File "interpreter.ml", line 67, characters 12-14:
-> 67 |       | Let(id, e1, e2) -> assert false
->                  ^^
-> Error (warning 27 [unused-var-strict]): unused variable id.
-> File "interpreter.ml", line 67, characters 16-18:
-> 67 |       | Let(id, e1, e2) -> assert false
->                      ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "interpreter.ml", line 67, characters 20-22:
-> 67 |       | Let(id, e1, e2) -> assert false
->                          ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
 > File "interpreter.ml", line 68, characters 12-14:
-> 68 |       | App(e1, e2) -> assert false 
+> 68 |       | App(e1, e2) -> (* how can that be interpreted *) assert false 
 >                  ^^
 > Error (warning 27 [unused-var-strict]): unused variable e1.
 > File "interpreter.ml", line 68, characters 16-18:
-> 68 |       | App(e1, e2) -> assert false 
+> 68 |       | App(e1, e2) -> (* how can that be interpreted *) assert false 
 >                      ^^
 > Error (warning 27 [unused-var-strict]): unused variable e2.
 > File "interpreter.ml", line 70, characters 14-15:
@@ -231,113 +253,15 @@ $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..
 >                           ^^
 > Error (warning 27 [unused-var-strict]): unused variable e2.
 > File "interpreter.ml", line 74, characters 12-13:
-> 74 |       | Fix(f, t, e) -> assert false 
+> 74 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
 >                  ^
 > Error (warning 27 [unused-var-strict]): unused variable f.
 > File "interpreter.ml", line 74, characters 15-16:
-> 74 |       | Fix(f, t, e) -> assert false 
+> 74 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
 >                     ^
 > Error (warning 27 [unused-var-strict]): unused variable t.
 > File "interpreter.ml", line 74, characters 18-19:
-> 74 |       | Fix(f, t, e) -> assert false 
+> 74 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
 >                        ^
 > Error (warning 27 [unused-var-strict]): unused variable e.
-> File "interpreter.ml", line 76, characters 12-14:
-> 76 |       | Seq(e1, e2) -> assert false
->                  ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "interpreter.ml", line 76, characters 16-18:
-> 76 |       | Seq(e1, e2) -> assert false
->                      ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
-[2]
-$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
-> File "typechecker.ml", line 41, characters 9-10:
-> 41 |     | If(c, e1, e2) -> assert false 
->               ^
-> Error (warning 27 [unused-var-strict]): unused variable c.
-> File "typechecker.ml", line 41, characters 12-14:
-> 41 |     | If(c, e1, e2) -> assert false 
->                  ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "typechecker.ml", line 41, characters 16-18:
-> 41 |     | If(c, e1, e2) -> assert false 
->                      ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
-> File "typechecker.ml", line 43, characters 10-11:
-> 43 |     | Fun(f, t, e) -> assert false 
->                ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "typechecker.ml", line 43, characters 13-14:
-> 43 |     | Fun(f, t, e) -> assert false 
->                   ^
-> Error (warning 27 [unused-var-strict]): unused variable t.
-> File "typechecker.ml", line 43, characters 16-17:
-> 43 |     | Fun(f, t, e) -> assert false 
->                      ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
-> File "typechecker.ml", line 44, characters 10-12:
-> 44 |     | Let(id, e1, e2) -> assert false 
->                ^^
-> Error (warning 27 [unused-var-strict]): unused variable id.
-> File "typechecker.ml", line 44, characters 14-16:
-> 44 |     | Let(id, e1, e2) -> assert false 
->                    ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "typechecker.ml", line 44, characters 18-20:
-> 44 |     | Let(id, e1, e2) -> assert false 
->                        ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
-> File "typechecker.ml", line 45, characters 10-12:
-> 45 |     | App(e1, e2) -> assert false 
->                ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "typechecker.ml", line 45, characters 14-16:
-> 45 |     | App(e1, e2) -> assert false 
->                    ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
-> File "typechecker.ml", line 47, characters 12-13:
-> 47 |     | Strct s -> assert false 
->                  ^
-> Error (warning 27 [unused-var-strict]): unused variable s.
-> File "typechecker.ml", line 48, characters 11-12:
-> 48 |     | GetF(e,f) -> assert false 
->                 ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
-> File "typechecker.ml", line 48, characters 13-14:
-> 48 |     | GetF(e,f) -> assert false 
->                   ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "typechecker.ml", line 49, characters 11-13:
-> 49 |     | SetF(e1, f, e2) -> assert false 
->                 ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "typechecker.ml", line 49, characters 15-16:
-> 49 |     | SetF(e1, f, e2) -> assert false 
->                     ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "typechecker.ml", line 49, characters 18-20:
-> 49 |     | SetF(e1, f, e2) -> assert false 
->                        ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
-> File "typechecker.ml", line 51, characters 10-11:
-> 51 |     | Fix(f, t, e) -> assert false 
->                ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "typechecker.ml", line 51, characters 13-14:
-> 51 |     | Fix(f, t, e) -> assert false 
->                   ^
-> Error (warning 27 [unused-var-strict]): unused variable t.
-> File "typechecker.ml", line 51, characters 16-17:
-> 51 |     | Fix(f, t, e) -> assert false 
->                      ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
-> File "typechecker.ml", line 53, characters 10-12:
-> 53 |     | Seq(e1, e2) -> assert false 
->                ^^
-> Error (warning 27 [unused-var-strict]): unused variable e1.
-> File "typechecker.ml", line 53, characters 14-16:
-> 53 |     | Seq(e1, e2) -> assert false 
->                    ^^
-> Error (warning 27 [unused-var-strict]): unused variable e2.
 [2]
