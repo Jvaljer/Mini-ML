@@ -43,8 +43,10 @@ let type_prog prog =
                        check e2 t1 tenv;
                        t1 (* and what if we want 2 different typed expr *)
     (* Functions *)
-    | Fun(f, t, e) -> assert false 
-    | Let(id, e1, e2) -> assert false 
+    | Fun(f, t, e) -> let t' = type_expr e tenv in
+                      TFun(t,t'); 
+    | Let(id, e1, e2) -> let t = type_expr e1 tenv in
+                         type_expr e2 tenv 
     | App(e1, e2) -> assert false 
     (* Structures *)
     | Strct s -> assert false 
