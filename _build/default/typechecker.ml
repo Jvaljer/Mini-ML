@@ -49,7 +49,10 @@ let type_prog prog =
     | Let(id, e1, e2) -> (* same idea but must 'create' the type first*)
                          let t = type_expr e1 tenv in
                          type_expr e2 (TypEnv.add id t tenv) 
-    | App(e1, e2) -> (* what does App() is doing exactly *) assert false 
+    | App(f1, f2) -> (* App() is the application of a function inside a function *)
+                     ( match type_expr f1 tenv with 
+                        | TFun(t,t') -> check f2 t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
+                        | _ -> assert false ) 
     (* Structures *)
     | Strct s -> assert false 
     | GetF(e,f) -> assert false 
