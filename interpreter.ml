@@ -65,7 +65,7 @@ let eval_prog (p: prog): value =
       (* Functions *)
       | Fun(f, t, e) -> (* not as simple as Let() ... *) assert false 
       | Let(id, e1, e2) -> eval e2 (Env.add id (eval e1 env) env)
-      | App(e1, e2) -> (* how can that be interpreted *) assert false 
+      | App(f1, f2) -> (* can be interpreted as a function called as an argument to another function *) assert false
       (* Structures *)
       | Strct s -> assert false 
       | GetF(e, f) -> assert false
