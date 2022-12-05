@@ -155,7 +155,7 @@ X : Done (quite sure)
            |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
-Functions  |    X    |    X     |       ~       |      ~        |
+Functions  |    X    |    X     |       X       |      X        |
 Structures |    X    |    X     |               |               |
 Recursion  |    X    |    X     |               |               |
 
