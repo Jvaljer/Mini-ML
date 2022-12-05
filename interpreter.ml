@@ -63,9 +63,16 @@ let eval_prog (p: prog): value =
       (* Conditons *)
       | If(c, e1, e2) -> if evalBool c env then eval e1 env else eval e2 env
       (* Functions *)
-      | Fun(f, t, e) -> (* not as simple as Let() ... *) assert false 
+      | Fun(f, t, e) -> let ptr = new_ptr () in
+                        Hashtbl.add mem ptr (VClos(f,e, env));
+                        VPtr ptr (* trying to 'mirror' the typechecking method to the interpretation *)
       | Let(id, e1, e2) -> eval e2 (Env.add id (eval e1 env) env)
-      | App(f1, f2) -> (* can be interpreted as a function called as an argument to another function *) assert false
+      | App(f1, f2) -> (* with Fun interpretation added -> reach for the value associated in mem *)
+                       ( match eval f1 env with
+                           | VPtr ptr -> ( match Hashtbl.find mem ptr with
+                                            | VClos(str,expr,env) -> eval expr (Env.add str (eval f2 env) env)
+                                            | _ -> assert false )
+                           | _ -> assert false )
       (* Structures *)
       | Strct s -> assert false 
       | GetF(e, f) -> assert false
