@@ -156,7 +156,7 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |               |               |
+Structures |    X    |    X     |       ~       |               |
 Recursion  |    X    |    X     |               |               |
 
 ##### in-sighted Extensions #####
