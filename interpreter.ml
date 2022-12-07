@@ -63,7 +63,7 @@ let eval_prog (p: prog): value =
       (* Conditons *)
       | If(c, e1, e2) -> if evalBool c env then eval e1 env else eval e2 env
       (* Functions *)
-      | Fun(f, t, e) -> let ptr = new_ptr () in
+      | Fun(f, _, e) -> let ptr = new_ptr () in
                         Hashtbl.add mem ptr (VClos(f,e, env));
                         VPtr ptr (* trying to 'mirror' the typechecking method to the interpretation *)
       | Let(id, e1, e2) -> eval e2 (Env.add id (eval e1 env) env)
@@ -78,7 +78,7 @@ let eval_prog (p: prog): value =
       | GetF(e, f) -> assert false
       | SetF(e1, f , e2) -> assert false 
       (* Fix Point *)
-      | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
+      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
       (* Sequencies *)
       | Seq(e1, e2) -> let _ = eval e1 env in 
                        eval e2 env; 
