@@ -13,6 +13,24 @@ let type_error ty_actual ty_expected =
            (Mmlpp.typ_to_string ty_expected) (Mmlpp.typ_to_string ty_actual))
 (* may be completed later *)
 
+(* In orde rto handle the structures, some external functions will be neccessary...*)
+let rec goThrough strct strct' = 
+  match (strct,strct') with 
+    | [],[] -> Some id
+    | (id,e)::l, (id',e')::l' -> if id=id' then
+                                      if type_expr e tenv <> type_expr e' tenv then None
+                                      else iter l l'
+                                    else None 
+
+let rec typeCheckStruct strctList strct = 
+  (* we wanna find a struct in the overall structList *)
+  match strctList with
+    | [] -> assert false (* nothign to do *)
+    (* we found the struct 'id' -> *)
+    | (id,expr)::st -> match goThrough(s,s') with 
+                        | Some id -> TStruct(id) 
+                        | None -> typeCheckStruct strct
+
 (* Mini-ML program type checking *)
 let type_prog prog =
 
@@ -54,7 +72,7 @@ let type_prog prog =
                         | TFun(t,t') -> check f2 t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
                         | _ -> assert false ) 
     (* Structures *)
-    | Strct s -> assert false 
+    | Strct s -> typeCheckStruct prog.types s (* might need to correct these *)
     | GetF(e,f) -> assert false 
     | SetF(e1, f, e2) -> assert false 
     (* Fix Point *)
