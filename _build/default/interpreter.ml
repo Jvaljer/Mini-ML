@@ -48,40 +48,40 @@ let eval_prog (p: prog): value =
       | Uop(Neg, e) -> VInt(evalInt e env)
       | Uop(Not, e) -> VBool(evalBool e env)
         (* Binary Operands : Arith *)
-      | Bop(Add, e1, e2) -> VInt(evalInt e1 env + evalInt e2 env)
-      | Bop(Mul, e1, e2) -> VInt(evalInt e1 env * evalInt e2 env)
-      | Bop(Sub, e1, e2) -> VInt(evalInt e1 env - evalInt e2 env)
-      | Bop(Div, e1, e2) -> VInt(evalInt e1 env / evalInt e2 env)
-      | Bop(Mod, e1, e2) -> VInt(evalInt e1 env mod evalInt e2 env)
+      | Bop(Add, e, e') -> VInt(evalInt e env + evalInt e' env)
+      | Bop(Mul, e, e') -> VInt(evalInt e env * evalInt e' env)
+      | Bop(Sub, e, e') -> VInt(evalInt e env - evalInt e' env)
+      | Bop(Div, e, e') -> VInt(evalInt e env / evalInt e' env)
+      | Bop(Mod, e, e') -> VInt(evalInt e env mod evalInt e' env)
         (* Binary Operands : Boolean Arith *)
-      | Bop(And, e1, e2) -> VBool(evalBool e1 env && evalBool e2 env)
-      | Bop(Or, e1, e2) -> VBool(evalBool e1 env || evalBool e2 env)
-      | Bop(Lt, e1, e2) -> VBool(evalInt e1 env < evalInt e2 env)
-      | Bop(Le, e1, e2) -> VBool(evalInt e1 env <= evalInt e2 env)
-      | Bop(Eq, e1, e2) -> VBool(evalBool e1 env == evalBool e2 env)
-      | Bop(Neq, e1, e2) -> VBool(eval e1 env != eval e2 env)
+      | Bop(And, e, e') -> VBool(evalBool e env && evalBool e' env)
+      | Bop(Or, e, e') -> VBool(evalBool e env || evalBool e' env)
+      | Bop(Lt, e, e') -> VBool(evalInt e env < evalInt e' env)
+      | Bop(Le, e, e') -> VBool(evalInt e env <= evalInt e' env)
+      | Bop(Eq, e, e') -> VBool(evalBool e env == evalBool e' env)
+      | Bop(Neq, e, e') -> VBool(eval e env != eval e' env)
       (* Conditons *)
-      | If(c, e1, e2) -> if evalBool c env then eval e1 env else eval e2 env
+      | If(c, e, e') -> if evalBool c env then eval e env else eval e' env
       (* Functions *)
-      | Fun(f, t, e) -> let ptr = new_ptr () in
+      | Fun(f, _, e) -> let ptr = new_ptr () in
                         Hashtbl.add mem ptr (VClos(f,e, env));
                         VPtr ptr (* trying to 'mirror' the typechecking method to the interpretation *)
-      | Let(id, e1, e2) -> eval e2 (Env.add id (eval e1 env) env)
-      | App(f1, f2) -> (* with Fun interpretation added -> reach for the value associated in mem *)
-                       ( match eval f1 env with
+      | Let(id, e, e') -> eval e' (Env.add id (eval e env) env)
+      | App(f, f') -> (* with Fun interpretation added -> reach for the value associated in mem *)
+                       ( match eval f env with
                            | VPtr ptr -> ( match Hashtbl.find mem ptr with
-                                            | VClos(str,expr,env) -> eval expr (Env.add str (eval f2 env) env)
+                                            | VClos(str,expr,env) -> eval expr (Env.add str (eval f' env) env)
                                             | _ -> assert false )
                            | _ -> assert false )
       (* Structures *)
       | Strct s -> assert false 
       | GetF(e, f) -> assert false
-      | SetF(e1, f , e2) -> assert false 
+      | SetF(e, f , e') -> assert false 
       (* Fix Point *)
-      | Fix(f, t, e) -> assert false (* might be similar to Fun() *)
+      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
       (* Sequencies *)
-      | Seq(e1, e2) -> let _ = eval e1 env in 
-                       eval e2 env; 
+      | Seq(e, e') -> let _ = eval e env in 
+                       eval e' env; 
 
 
 

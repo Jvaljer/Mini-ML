@@ -13,24 +13,6 @@ let type_error ty_actual ty_expected =
            (Mmlpp.typ_to_string ty_expected) (Mmlpp.typ_to_string ty_actual))
 (* may be completed later *)
 
-(* In orde rto handle the structures, some external functions will be neccessary...*)
-let rec goThrough strct strct' = 
-  match (strct,strct') with 
-    | [],[] -> Some id
-    | (id,e)::l, (id',e')::l' -> if id=id' then
-                                      if type_expr e tenv <> type_expr e' tenv then None
-                                      else iter l l'
-                                    else None 
-
-let rec typeCheckStruct strctList strct = 
-  (* we wanna find a struct in the overall structList *)
-  match strctList with
-    | [] -> assert false (* nothign to do *)
-    (* we found the struct 'id' -> *)
-    | (id,expr)::st -> match goThrough(s,s') with 
-                        | Some id -> TStruct(id) 
-                        | None -> typeCheckStruct strct
-
 (* Mini-ML program type checking *)
 let type_prog prog =
 
@@ -51,36 +33,42 @@ let type_prog prog =
     | Uop(Neg, e) -> check e TInt tenv; TInt
     | Uop(Not, e) -> check e TBool tenv; TBool
       (* Binary Operands *)
-    | Bop((Add | Mul | Sub | Div | Mod), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TInt
-    | Bop((And | Or), e1, e2) -> check e1 TBool tenv; check e2 TBool tenv; TBool
-    | Bop((Lt | Le), e1, e2) -> check e1 TInt tenv; check e2 TInt tenv; TBool
-    | Bop((Eq | Neq), e1, e2) -> check e1 (type_expr e2 tenv) tenv; TBool
+    | Bop((Add | Mul | Sub | Div | Mod), e, e') -> check e TInt tenv; check e' TInt tenv; TInt
+    | Bop((And | Or), e, e') -> check e TBool tenv; check e' TBool tenv; TBool
+    | Bop((Lt | Le), e, e') -> check e TInt tenv; check e' TInt tenv; TBool
+    | Bop((Eq | Neq), e, e') -> check e (type_expr e' tenv) tenv; TBool
     (* Conditions *)
-    | If(c, e1, e2) -> check c TBool tenv; 
-                       let t1 = type_expr e1 tenv in
-                       check e2 t1 tenv;
-                       t1 (* and what if we want 2 different typed expr *)
+    | If(c, e, e') -> check c TBool tenv; 
+                       let t = type_expr e tenv in
+                       check e' t tenv;
+                       t (* and what if we want 2 different typed expr *)
     (* Functions *)
     | Fun(f, t, e) -> (* we want to recognize the f-called function as t-typed -> add it to the Env*)
                       let t' = type_expr e (TypEnv.add f t tenv) in
                       TFun(t,t');
-    | Let(id, e1, e2) -> (* same idea but must 'create' the type first*)
-                         let t = type_expr e1 tenv in
-                         type_expr e2 (TypEnv.add id t tenv) 
-    | App(f1, f2) -> (* App() is the application of a function inside a function *)
-                     ( match type_expr f1 tenv with 
-                        | TFun(t,t') -> check f2 t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
+    | Let(id, e, e') -> (* same idea but must 'create' the type first*)
+                         let t = type_expr e tenv in
+                         type_expr e' (TypEnv.add id t tenv) 
+    | App(f, f') -> (* App() is the application of a function inside a function *)
+                     ( match type_expr f tenv with 
+                        | TFun(t,t') -> check f' t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
                         | _ -> assert false ) 
     (* Structures *)
-    | Strct s -> typeCheckStruct prog.types s (* might need to correct these *)
-    | GetF(e,f) -> assert false 
-    | SetF(e1, f, e2) -> assert false 
+    | Strct s -> (* struct is a list of ids with associated exprs
+                    the aim is to check if everyone of these expr is well-typed
+                    -> rec match on everyone of them then typeCheck ?
+                      + add it to the Env (in order to find it later on ;D ) 
+                    -> if all of them is well typed then TStruct ?*)
+                 assert false    
+    
+    (* once Strct typechecking is done these will make more sense *)
+    | GetF(e,f) -> assert false
+    | SetF(e, f, e') -> assert false
     (* Fix Point *)
     | Fix(f, t, e) -> assert false 
     (* Other cases *)
-    | Seq(e1, e2) -> let _ = type_expr e1 tenv in
-                     type_expr e2 tenv;
-
+    | Seq(e, e') -> let _ = type_expr e tenv in
+                     type_expr e' tenv;
   in
 
   type_expr prog.code TypEnv.empty
