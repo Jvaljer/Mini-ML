@@ -54,12 +54,23 @@ let type_prog prog =
                         | TFun(t,t') -> check f' t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
                         | _ -> assert false ) 
     (* Structures *)
-    | Strct s -> (* struct is a list of ids with associated exprs
-                    the aim is to check if everyone of these expr is well-typed
-                    -> rec match on everyone of them then typeCheck ?
-                      + add it to the Env (in order to find it later on ;D ) 
-                    -> if all of them is well typed then TStruct ?*)
-                 assert false    
+    | Strct s -> let rec buildStruct = function
+                   | [] -> assert true 
+                   | (id,e)::l -> ( let rec iter = function
+                                      | [],[] -> Some id
+                                      | (id,e)::l1, (id',e')::l2 -> if id=id' then 
+                                                                       if type_expr e tenv <> type_expr e' tenv then None 
+                                                                       else iter (l1,l2) 
+                                                                     else None 
+                                      | _, _ -> None
+                                    in
+                                    match iter (l,l'::l) with
+                                      | Some id -> TStrct(id)
+                                      | None -> buildStruct l )
+  in
+  buildStruct prog.types
+
+                                    
     
     (* once Strct typechecking is done these will make more sense *)
     | GetF(e,f) -> assert false
