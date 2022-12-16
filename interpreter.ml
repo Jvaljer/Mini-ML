@@ -74,7 +74,17 @@ let eval_prog (p: prog): value =
                                             | _ -> assert false )
                            | _ -> assert false )
       (* Structures *)
-      | Strct s -> assert false 
+      | Strct s -> (* first of all we wanna create a Hashtbl with all the struct elements *)
+                   ( let rec storeStruct strct hash =
+                       match strct with 
+                         | [] -> (* now that all the struct has been evaluated and stored we add it to the memory *)
+                                 let ptr = new_ptr () in 
+                                 Hashtbl.add mem ptr (VStrct hash)
+                       (* we wanna interpret each one of the struct's expr and add the evaluation in the Hashtbl associated with the correct id *)
+                         | (id,expr)::s' -> Hashtbl.add hash id (eval expr env); storeStruct s' hash )
+                     in 
+                   let structHash = Hashtbl.create (List.length s) in 
+                   storeStruct s hash
       | GetF(e, f) -> assert false
       | SetF(e, f , e') -> assert false 
       (* Fix Point *)

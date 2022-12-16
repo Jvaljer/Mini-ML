@@ -54,21 +54,28 @@ let type_prog prog =
                         | TFun(t,t') -> check f' t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
                         | _ -> assert false ) 
     (* Structures *)
-    | Strct s -> let rec buildStruct = function
-                   | [] -> assert true 
-                   | (s_name,s_values)::l -> ( let rec iter = function
+    | Strct s -> let rec checkStruct = function
+                   (* if the prog types are empty then nothing *)
+                   | [] -> assert false 
+                   (* else we are gonna test if the expr given to the id is well typed *)
+                   | (s_name,s_values)::l -> ( let rec typeCheckStruct = function
+                                                 (* if both are empty that's because we went through well -> all is well typed so just return the struct as a whole TypeStruct*)
                                                  | [],[] -> Some s_name
-                                                 | (id,e)::l1, (id',t',_)::l2 -> if id=id' then 
-                                                                                    if t'<> type_expr e tenv then None 
-                                                                                    else iter (l1,l2) 
-                                                                                  else None 
+                                                 (* else match it with the referenced expr in the prog.types and check if it's coherent*)
+                                                 | (id,expr)::l, (id',t',_)::l' -> if id=id' then 
+                                                                                    (* if the ids are matching then check types *)
+                                                                                    if t'<> type_expr expr tenv then None (* if not same type return None *)
+                                                                                    else typeCheckStruct (l,l') (* if same type then go to the next associations *)
+                                                                                  else None (* if different ids then None *)
                                                  | _, _ -> None
                                                in
-                                               match iter (s,s_values) with
-                                                 | Some id -> TStrct(s_name)
-                                                 | None -> buildStruct l )
+                                               (* we are gonna check if the wanted association is possible *)
+                                               match typeCheckStruct (s,s_values) with
+                                                 (* if all went good then make the struct a Type *)
+                                                 | Some returnedName -> TStrct returnedName 
+                                                 | None -> checkStruct l )
                  in
-                 buildStruct prog.types
+                 checkStruct prog.types
 
                                     
     
