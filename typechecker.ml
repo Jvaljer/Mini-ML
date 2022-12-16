@@ -56,19 +56,19 @@ let type_prog prog =
     (* Structures *)
     | Strct s -> let rec buildStruct = function
                    | [] -> assert true 
-                   | (id,e)::l -> ( let rec iter = function
-                                      | [],[] -> Some id
-                                      | (id,e)::l1, (id',t',e')::l2 -> if id=id' then 
-                                                                       if t'<> type_expr e tenv then None 
-                                                                       else iter (l1,l2) 
-                                                                     else None 
-                                      | _, _ -> None
-                                    in
-                                    match iter (l,l::l') with
-                                      | Some id -> TStrct(id)
-                                      | None -> buildStruct l )
-  in
-  buildStruct prog.types
+                   | (s_name,s_values)::l -> ( let rec iter = function
+                                                 | [],[] -> Some s_name
+                                                 | (id,e)::l1, (id',t',_)::l2 -> if id=id' then 
+                                                                                    if t'<> type_expr e tenv then None 
+                                                                                    else iter (l1,l2) 
+                                                                                  else None 
+                                                 | _, _ -> None
+                                               in
+                                               match iter (s,s_values) with
+                                                 | Some id -> TStrct(s_name)
+                                                 | None -> buildStruct l )
+                 in
+                 buildStruct prog.types
 
                                     
     
