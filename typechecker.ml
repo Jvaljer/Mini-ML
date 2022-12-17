@@ -13,6 +13,16 @@ let type_error ty_actual ty_expected =
            (Mmlpp.typ_to_string ty_expected) (Mmlpp.typ_to_string ty_actual))
 (* may be completed later *)
 
+
+(* function used to find a special struct ident and return the associated struct *)
+let rec findStruct = function 
+  match s with 
+    | [] -> ""
+    | (id,strct)::s' -> try 
+                          TypEnv.find id tenv 
+                        with 
+                          Not_Found -> assert false 
+                            
 (* Mini-ML program type checking *)
 let type_prog prog =
 
@@ -77,16 +87,31 @@ let type_prog prog =
                  in
                  checkStruct prog.types
 
-                                    
-    
     (* once Strct typechecking is done these will make more sense *)
-    | GetF(e,f) -> assert false
-    | SetF(e, f, e') -> assert false
-    (* Fix Point *)
-    | Fix(f, t, e) -> assert false 
-    (* Other cases *)
+    | GetF(e,f) -> ( match type_expr e tenv with 
+                       | TStruct strct -> (* we wanna find the associate struct and eval its type *)
+                                       let s = findStruct strct tenv in
+                                         try 
+                                           (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
+                                           let _,t,_ = List.find f s in 
+                                           check e tenv 
+                                       with 
+                                         Not_found -> assert false      
+                       | _ -> assert false )
+    | SetF(e, f, e') -> (* same as GetF but with specifications -> we wanna check the second expr too & add the 'mutable' possibility *)
+                        ( match type_expr e tenv with
+                            | Tstruct strct -> let s = findStruct strct tenv in
+                                                 try 
+                                                   let _,t,mut = List.find f s in 
+                                                   check e' tenv 
+                                                   if mut then TUnit else ""
+                                                 with 
+                                                   Not_found -> assert false )
+    (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv;
+    (* Fix Point *)
+    | Fix(f, t, e) -> assert false 
   in
 
   type_expr prog.code TypEnv.empty

@@ -83,15 +83,16 @@ let eval_prog (p: prog): value =
                        (* we wanna interpret each one of the struct's expr and add the evaluation in the Hashtbl associated with the correct id *)
                          | (id,expr)::s' -> Hashtbl.add hash id (eval expr env); storeStruct s' hash )
                      in 
+                   (* now apply all above and struct is well interpreted *)
                    let structHash = Hashtbl.create (List.length s) in 
                    storeStruct s hash
       | GetF(e, f) -> assert false
       | SetF(e, f , e') -> assert false 
-      (* Fix Point *)
-      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
-      (* Sequencies *)
+      (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
                        eval e' env; 
+      (* Fix Point *)
+      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
 
 
 
