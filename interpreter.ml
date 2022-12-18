@@ -87,8 +87,18 @@ let eval_prog (p: prog): value =
                  (* now apply all above and struct is well interpreted *)
                    let structHash = Hashtbl.create (List.length s) in 
                    storeStruct s structHash
-      | GetF(e, f) -> assert false
-      | SetF(e, f , e') -> assert false 
+      | GetF(s, expr) -> (* first we wanna match the return value of the expr *)
+                      match eval s env with 
+                        (* if we are intepreting a structure as wanted then inteprete the given expr*)
+                        | VPtr ptr -> Hashtbl.find (findStruct ptr) expr
+                        | _ -> assert false 
+      | SetF(id, sf , e') -> (* here check before anything the given expr intepretation *)
+                          let v = eval e' env in
+                          (* then check if the given ident is well assigned to a structure *)
+                          match eval id env with 
+                            (* and if so find the structure and replace its actual assigned expr *)
+                            | VPtr ptr -> Hashtbl.replace (findStruct ptr) sf s'; VUnit 
+                            | _ -> assert false 
       (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
                        eval e' env; 
