@@ -75,23 +75,25 @@ let eval_prog (p: prog): value =
                            | _ -> assert false )
       (* Structures *)
       | Strct s -> (* first of all we wanna create a Hashtbl with all the struct elements *)
-                   ( let rec storeStruct strct hash =
-                       match strct with 
-                         | [] -> (* now that all the struct has been evaluated and stored we add it to the memory *)
-                                 let ptr = new_ptr () in 
-                                 Hashtbl.add mem ptr (VStrct hash)
-                       (* we wanna interpret each one of the struct's expr and add the evaluation in the Hashtbl associated with the correct id *)
-                         | (id,expr)::s' -> Hashtbl.add hash id (eval expr env); storeStruct s' hash )
-                     in 
+                   let rec storeStruct strct hash =
+                     match strct with 
+                       | [] -> (* now that all the struct has been evaluated and stored we add it to the memory *)
+                               let ptr = new_ptr () in 
+                               Hashtbl.add mem ptr (VStrct hash);
+                               VPtr ptr
+                     (* we wanna interpret each one of the struct's expr and add the evaluation in the Hashtbl associated with the correct id *)
+                       | (id,expr)::s' -> Hashtbl.add hash id (eval expr env); storeStruct s' hash 
+                   in 
+                 (* now apply all above and struct is well interpreted *)
                    let structHash = Hashtbl.create (List.length s) in 
-                   storeStruct s hash
+                   storeStruct s structHash
       | GetF(e, f) -> assert false
       | SetF(e, f , e') -> assert false 
-      (* Fix Point *)
-      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
-      (* Sequencies *)
+      (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
                        eval e' env; 
+      (* Fix Point *)
+      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
 
 
 

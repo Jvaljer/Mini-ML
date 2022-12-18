@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_44f0fe_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_4a85c9_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -152,9 +152,45 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_44f0fe_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl interpreter.ml) > _build/default/.mmlcat.eobjs/interpreter.ml.d
-> File "interpreter.ml", line 84, characters 101-102:
-> 84 |                          | (id,expr)::s' -> Hashtbl.add hash id (eval expr env); storeStruct s' hash )
->                                                                                                           ^
-> Error: Syntax error
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
+> File "typechecker.ml", line 93, characters 58-63:
+> 93 |                                        let s = findStruct strct tenv in
+>                                                                ^^^^^
+> Error: This expression has type string but an expression was expected of type
+>          (string * 'a) list
+[2]
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Interpreter.cmo -c -impl interpreter.ml)
+> File "interpreter.ml", line 90, characters 13-14:
+> 90 |       | GetF(e, f) -> assert false
+>                   ^
+> Error (warning 27 [unused-var-strict]): unused variable e.
+> File "interpreter.ml", line 90, characters 16-17:
+> 90 |       | GetF(e, f) -> assert false
+>                      ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "interpreter.ml", line 91, characters 13-14:
+> 91 |       | SetF(e, f , e') -> assert false 
+>                   ^
+> Error (warning 27 [unused-var-strict]): unused variable e.
+> File "interpreter.ml", line 91, characters 16-17:
+> 91 |       | SetF(e, f , e') -> assert false 
+>                      ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "interpreter.ml", line 91, characters 20-22:
+> 91 |       | SetF(e, f , e') -> assert false 
+>                          ^^
+> Error (warning 27 [unused-var-strict]): unused variable e'.
+> File "interpreter.ml", line 96, characters 12-13:
+> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
+>                  ^
+> Error (warning 27 [unused-var-strict]): unused variable f.
+> File "interpreter.ml", line 96, characters 15-16:
+> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
+>                     ^
+> Error (warning 27 [unused-var-strict]): unused variable t.
+> File "interpreter.ml", line 96, characters 18-19:
+> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
+>                        ^
+> Error (warning 27 [unused-var-strict]): unused variable e.
 [2]

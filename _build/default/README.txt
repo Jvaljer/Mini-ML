@@ -151,13 +151,15 @@ I consider going through this project with the 2nd working-method given by T.Bal
   Implementing + Testing each line before going to the next one.
 
 X : Done (quite sure)
-~ : Not completed (or Done but not sure)
+~ : Not completed
+* : Done but not sure / build error 
+
            |  Lexer  |  Parser  |  TypeChecker  |  Interpreter  |
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       ~       |               |
-Recursion  |    X    |    X     |               |               |
+Structures |    X    |    X     |       *       |      ~        |
+Fix Point  |    X    |    X     |               |               |
 
 ##### in-sighted Extensions #####
 

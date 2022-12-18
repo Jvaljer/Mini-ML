@@ -15,13 +15,13 @@ let type_error ty_actual ty_expected =
 
 
 (* function used to find a special struct ident and return the associated struct *)
-let rec findStruct = function 
+let findStruct s env = 
   match s with 
     | [] -> ""
-    | (id,strct)::s' -> try 
-                          TypEnv.find id tenv 
+    | (id,_)::s' -> try 
+                          TypEnv.find id env 
                         with 
-                          Not_Found -> assert false 
+                          Not_found -> assert false
                             
 (* Mini-ML program type checking *)
 let type_prog prog =
@@ -89,22 +89,25 @@ let type_prog prog =
 
     (* once Strct typechecking is done these will make more sense *)
     | GetF(e,f) -> ( match type_expr e tenv with 
-                       | TStruct strct -> (* we wanna find the associate struct and eval its type *)
+                       | TStrct strct -> (* we wanna find the associate struct and eval its type *)
                                        let s = findStruct strct tenv in
                                          try 
                                            (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
                                            let _,t,_ = List.find f s in 
                                            check e tenv 
                                        with 
-                                         Not_found -> assert false      
+                                         Not_found -> assert false    
                        | _ -> assert false )
     | SetF(e, f, e') -> (* same as GetF but with specifications -> we wanna check the second expr too & add the 'mutable' possibility *)
                         ( match type_expr e tenv with
                             | Tstruct strct -> let s = findStruct strct tenv in
                                                  try 
                                                    let _,t,mut = List.find f s in 
-                                                   check e' tenv 
-                                                   if mut then TUnit else ""
+                                                   check e' tenv; 
+                                                   if mut 
+                                                     then TUnit 
+                                                   else 
+                                                     assert false 
                                                  with 
                                                    Not_found -> assert false )
     (* Sequence *)
