@@ -14,14 +14,12 @@ let type_error ty_actual ty_expected =
 (* may be completed later *)
 
 
-(* function used to find a special struct ident and return the associated struct *)
+(* function used to find a special struct with its ident and return the associated struct *)
 let findStruct s env = 
-  match s with 
-    | [] -> ""
-    | (id,_)::s' -> try 
-                          TypEnv.find id env 
-                        with 
-                          Not_found -> assert false
+  try 
+    TypEnv.find s env
+  with
+    Not_found -> assert false
                             
 (* Mini-ML program type checking *)
 let type_prog prog =

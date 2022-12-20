@@ -6,6 +6,7 @@ type typ =
   | TUnit
   | TFun of typ * typ
   | TStrct of string
+  
 type strct = (string * typ * bool) list
 
 type uop = 

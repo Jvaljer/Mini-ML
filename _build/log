@@ -1,9 +1,9 @@
 # dune build
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Workspace root: /home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML
+# Workspace root: /home/abel/JvaljerGit/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_4a85c9_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_6e3f7b_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -23,16 +23,14 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_4a85c9_output
 #      map
 #        { "DUNE_OCAML_HARDCODED" : "/home/abel/.opam/default/lib"
 #        ; "DUNE_OCAML_STDLIB" : "/usr/lib/ocaml"
-#        ; "DUNE_SOURCEROOT" :
-#            "/home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML"
-#        ; "INSIDE_DUNE" :
-#            "/home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML/_build/default"
+#        ; "DUNE_SOURCEROOT" : "/home/abel/JvaljerGit/Mini-ML"
+#        ; "INSIDE_DUNE" : "/home/abel/JvaljerGit/Mini-ML/_build/default"
 #        ; "OCAMLFIND_IGNORE_DUPS_IN" :
-#            "/home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML/_build/install/default/lib"
+#            "/home/abel/JvaljerGit/Mini-ML/_build/install/default/lib"
 #        ; "OCAMLPATH" :
-#            "/home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML/_build/install/default/lib"
+#            "/home/abel/JvaljerGit/Mini-ML/_build/install/default/lib"
 #        ; "OCAMLTOP_INCLUDE_PATH" :
-#            "/home/abel/fac/Mag3Info/Sem5/Compil/MiniML/Mini-ML/_build/install/default/lib/toplevel"
+#            "/home/abel/JvaljerGit/Mini-ML/_build/install/default/lib/toplevel"
 #        ; "OCAML_COLOR" : "always"
 #        ; "OPAMCOLOR" : "always"
 #        }
@@ -153,44 +151,17 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_4a85c9_output
 #      }
 #  }
 $ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
-$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
-> File "typechecker.ml", line 93, characters 58-63:
-> 93 |                                        let s = findStruct strct tenv in
->                                                                ^^^^^
-> Error: This expression has type string but an expression was expected of type
->          (string * 'a) list
-[2]
 $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Interpreter.cmo -c -impl interpreter.ml)
-> File "interpreter.ml", line 90, characters 13-14:
-> 90 |       | GetF(e, f) -> assert false
->                   ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
-> File "interpreter.ml", line 90, characters 16-17:
-> 90 |       | GetF(e, f) -> assert false
->                      ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "interpreter.ml", line 91, characters 13-14:
-> 91 |       | SetF(e, f , e') -> assert false 
->                   ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
-> File "interpreter.ml", line 91, characters 16-17:
-> 91 |       | SetF(e, f , e') -> assert false 
->                      ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "interpreter.ml", line 91, characters 20-22:
-> 91 |       | SetF(e, f , e') -> assert false 
->                          ^^
-> Error (warning 27 [unused-var-strict]): unused variable e'.
-> File "interpreter.ml", line 96, characters 12-13:
-> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
->                  ^
-> Error (warning 27 [unused-var-strict]): unused variable f.
-> File "interpreter.ml", line 96, characters 15-16:
-> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
->                     ^
-> Error (warning 27 [unused-var-strict]): unused variable t.
-> File "interpreter.ml", line 96, characters 18-19:
-> 96 |       | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
->                        ^
-> Error (warning 27 [unused-var-strict]): unused variable e.
+> File "interpreter.ml", line 95, characters 8-12:
+> 95 |       | SetF(id, sf , e') -> (* here check before anything the given expr intepretation *)
+>              ^^^^
+> Error: This variant pattern is expected to have type value
+>        There is no constructor SetF within type value
+[2]
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
+> File "typechecker.ml", line 94, characters 65-66:
+> 94 |                                            let _,t,_ = List.find f s in 
+>                                                                       ^
+> Error: This expression has type string but an expression was expected of type
+>          'a -> bool
 [2]

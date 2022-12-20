@@ -14,14 +14,12 @@ let type_error ty_actual ty_expected =
 (* may be completed later *)
 
 
-(* function used to find a special struct ident and return the associated struct *)
+(* function used to find a special struct with its ident and return the associated struct *)
 let findStruct s env = 
-  match s with 
-    | [] -> ""
-    | (id,_)::s' -> try 
-                          TypEnv.find id env 
-                        with 
-                          Not_found -> assert false
+  try 
+    TypEnv.find s env
+  with
+    Not_found -> assert false
                             
 (* Mini-ML program type checking *)
 let type_prog prog =
@@ -93,7 +91,7 @@ let type_prog prog =
                                        let s = findStruct strct tenv in
                                          try 
                                            (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
-                                           let _,t,_ = List.find f s in 
+                                           let _,t,_ = List.find f s in (* this is not working ...*)
                                            check e tenv 
                                        with 
                                          Not_found -> assert false    
@@ -114,7 +112,7 @@ let type_prog prog =
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv;
     (* Fix Point *)
-    | Fix(f, t, e) -> assert false 
+    | Fix(f, t, e) -> type_expr e (TypEnv.add f t tenv) (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
   in
 
   type_expr prog.code TypEnv.empty
