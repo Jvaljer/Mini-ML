@@ -91,7 +91,7 @@ let type_prog prog =
                                        let s = findStruct strct tenv in
                                          try 
                                            (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
-                                           let _,t,_ = List.find f s in 
+                                           let _,t,_ = List.find f s in (* this is not working ...*)
                                            check e tenv 
                                        with 
                                          Not_found -> assert false    
@@ -112,7 +112,7 @@ let type_prog prog =
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv;
     (* Fix Point *)
-    | Fix(f, t, e) -> assert false 
+    | Fix(f, t, e) -> type_expr e (TypEnv.add f t tenv) (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
   in
 
   type_expr prog.code TypEnv.empty

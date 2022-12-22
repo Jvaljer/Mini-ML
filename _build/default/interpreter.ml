@@ -35,6 +35,13 @@ let eval_prog (p: prog): value =
     fun () -> incr cpt; !cpt
   in
 
+  (* auxiliar functions *)
+  let findStrct s = 
+      match Hashtbl.find mem s with 
+        | VStrct v -> v
+        | _ -> assert false 
+  in
+  
   (* Interpreting a special Expr, consideratibg the environment + memory within which we wanna interpret it *)
   let rec eval (e: expr) (env: value Env.t): value = 
     match e with
@@ -90,20 +97,29 @@ let eval_prog (p: prog): value =
       | GetF(s, expr) -> (* first we wanna match the return value of the expr *)
                       match eval s env with 
                         (* if we are intepreting a structure as wanted then inteprete the given expr*)
-                        | VPtr ptr -> Hashtbl.find (findStruct ptr) expr
+                        | VPtr ptr -> Hashtbl.find (findStrct ptr) expr
                         | _ -> assert false 
       | SetF(id, sf , e') -> (* here check before anything the given expr intepretation *)
                           let v = eval e' env in
                           (* then check if the given ident is well assigned to a structure *)
                           match eval id env with 
                             (* and if so find the structure and replace its actual assigned expr *)
-                            | VPtr ptr -> Hashtbl.replace (findStruct ptr) sf s'; VUnit 
+                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) sf s'; VUnit 
                             | _ -> assert false 
       (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
                        eval e' env; 
       (* Fix Point *)
-      | Fix(f, t, e) -> assert false (* might be similar to Fun() ? *)
+      | Fix(f, t, e) -> (* e shall be a Fun so we match it first *)
+                        match eval e env with 
+                          | Fun(id, _, expr) -> (* then we wanna get its value *)
+                                                let v = VClos(id, expr, env) in 
+                                                (* and add it to the Hashtbl in order to be able to call it later *)
+                                                let ptr = new_ptr() in
+                                                Hashtbl.add mem ptr v env;
+                                                (* and finally return it *)
+                                                VPtr ptr
+                          | _ -> assert false 
 
 
 

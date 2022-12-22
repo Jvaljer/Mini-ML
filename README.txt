@@ -159,7 +159,7 @@ Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
 Structures |    X    |    X     |       *       |      ~        |
-Fix Point  |    X    |    X     |               |               |
+Fix Point  |    X    |    X     |       *       |      ~        |
 
 ##### in-sighted Extensions #####
 
