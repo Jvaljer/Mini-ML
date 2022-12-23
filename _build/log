@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/abel/JvaljerGit/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_814634_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_805164_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -150,13 +150,13 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_814634_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl interpreter.ml) > _build/default/.mmlcat.eobjs/interpreter.ml.d
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
 $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
-> File "typechecker.ml", line 94, characters 65-66:
-> 94 |                                            let _,t,_ = List.find f s in (* this is not working ...*)
->                                                                       ^
+> File "typechecker.ml", line 21, characters 10-11:
+> 21 |     Strct s
+>                ^
 > Error: This expression has type string but an expression was expected of type
->          'a -> bool
+>          (string * expr) list
 [2]
 $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Interpreter.cmo -c -impl interpreter.ml)
 > File "interpreter.ml", line 102, characters 8-12:

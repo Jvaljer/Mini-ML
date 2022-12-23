@@ -104,11 +104,12 @@ let eval_prog (p: prog): value =
                           (* then check if the given ident is well assigned to a structure *)
                           match eval id env with 
                             (* and if so find the structure and replace its actual assigned expr *)
-                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) sf s'; VUnit 
+                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) sf s'
+                                          VUnit
                             | _ -> assert false 
       (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
-                       eval e' env; 
+                      eval e' env; 
       (* Fix Point *)
       | Fix(f, t, e) -> (* e shall be a Fun so we match it first *)
                         match eval e env with 

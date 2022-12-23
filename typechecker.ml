@@ -16,6 +16,7 @@ let type_error ty_actual ty_expected =
 
 (* function used to find a special struct with its ident and return the associated struct *)
 let findStruct s env = 
+  (* must redo it cause not working (we wanna return a Strct...) *)
   try 
     TypEnv.find s env
   with
@@ -91,7 +92,7 @@ let type_prog prog =
                                        let s = findStruct strct tenv in
                                          try 
                                            (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
-                                           let _,t,_ = List.find f s in (* this is not working ...*)
+                                           let _,t,_ = (List.find (fun(x,_,_) -> x = f )) s in (* this is not working ...*)
                                            check e tenv 
                                        with 
                                          Not_found -> assert false    
