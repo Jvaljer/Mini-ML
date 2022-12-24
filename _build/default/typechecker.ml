@@ -15,12 +15,14 @@ let type_error ty_actual ty_expected =
 
 
 (* function used to find a special struct with its ident and return the associated struct *)
-let findStruct s env = 
-  try 
-    TypEnv.find s env;
-    Strct s
-  with
-    Not_found -> assert false
+let rec findStruct strct_id list env = 
+  (* with this function we wanna found the associated struct to teh struct_name 'strct_id' *)
+  match list with 
+    | [] -> assert false
+    | (id,values)::strct -> if id=strct_id 
+                              then values 
+                            else 
+                              findStruct strct_id strct env
                             
 (* Mini-ML program type checking *)
 let type_prog prog =
@@ -89,26 +91,28 @@ let type_prog prog =
     (* once Strct typechecking is done these will make more sense *)
     | GetF(e,f) -> ( match type_expr e tenv with 
                        | TStrct strct -> (* we wanna find the associate struct and eval its type *)
-                                       let s = findStruct strct tenv in
+                                      (let s = findStruct strct prog.types tenv in
                                          try 
                                            (* now that we've get the special associated struct we wanna get the type and evaluate the initial expr *)
-                                           let _,t,_ = (List.find (fun(x,_,_) -> x = f )) s in (* this is not working ...*)
-                                           check e tenv 
+                                           let _,t,_ = (List.find (fun(x,_,_) -> x = f )) s in
+                                           check e t tenv;
+                                           TUnit
                                        with 
-                                         Not_found -> assert false    
+                                         Not_found -> assert false )   
                        | _ -> assert false )
     | SetF(e, f, e') -> (* same as GetF but with specifications -> we wanna check the second expr too & add the 'mutable' possibility *)
                         ( match type_expr e tenv with
-                            | Tstruct strct -> let s = findStruct strct tenv in
+                            | TStrct strct -> (let s = findStruct strct prog.types tenv in
                                                  try 
-                                                   let _,t,mut = List.find f s in 
-                                                   check e' tenv; 
+                                                   let _,t,mut = (List.find (fun(f',_,_) -> f' = f)) s in 
+                                                   check e' t tenv; 
                                                    if mut 
                                                      then TUnit 
                                                    else 
                                                      assert false 
                                                  with 
                                                    Not_found -> assert false )
+                            | _ -> assert false )
     (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv;

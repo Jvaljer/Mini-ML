@@ -99,12 +99,12 @@ let eval_prog (p: prog): value =
                         (* if we are intepreting a structure as wanted then inteprete the given expr*)
                         | VPtr ptr -> Hashtbl.find (findStrct ptr) expr
                         | _ -> assert false 
-      | SetF(id, sf , e') -> (* here check before anything the given expr intepretation *)
+      | SetF(e, f , e') -> (* here check before anything the given expr intepretation *)
                           let v = eval e' env in
                           (* then check if the given ident is well assigned to a structure *)
-                          match eval id env with 
+                          match eval e env with 
                             (* and if so find the structure and replace its actual assigned expr *)
-                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) sf s'
+                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
                                           VUnit
                             | _ -> assert false 
       (* Sequences *)
