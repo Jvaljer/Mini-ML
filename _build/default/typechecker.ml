@@ -102,22 +102,23 @@ let type_prog prog =
                        | _ -> assert false )
     | SetF(e, f, e') -> (* same as GetF but with specifications -> we wanna check the second expr too & add the 'mutable' possibility *)
                         ( match type_expr e tenv with
-                            | TStrct strct -> (let s = findStruct strct prog.types tenv in
-                                                 try 
-                                                   let _,t,mut = (List.find (fun(f',_,_) -> f' = f)) s in 
-                                                   check e' t tenv; 
-                                                   if mut 
-                                                     then TUnit 
-                                                   else 
-                                                     assert false 
-                                                 with 
-                                                   Not_found -> assert false )
+                            | TStrct strct -> ( let s = findStruct strct prog.types tenv in
+                                                  try 
+                                                    let _,t,mut = (List.find (fun(f',_,_) -> f' = f)) s in 
+                                                    check e' t tenv; 
+                                                    if mut 
+                                                      then TUnit 
+                                                    else 
+                                                      assert false 
+                                                  with 
+                                                    Not_found -> assert false )
                             | _ -> assert false )
     (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv;
     (* Fix Point *)
-    | Fix(f, t, e) -> type_expr e (TypEnv.add f t tenv) (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
+    | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
+                      type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
   in
 
   type_expr prog.code TypEnv.empty

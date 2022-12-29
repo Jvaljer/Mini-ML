@@ -11,6 +11,7 @@ type value =
   | VBool  of bool
   | VUnit
   | VPtr   of int
+
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
   | VClos  of string * expr * value Env.t
@@ -54,13 +55,13 @@ let eval_prog (p: prog): value =
         (* Unary Operands *)
       | Uop(Neg, e) -> VInt(evalInt e env)
       | Uop(Not, e) -> VBool(evalBool e env)
-        (* Binary Operands : Arith *)
+        (* Binary Operands : Arith *) (* Maybe possible to 'list' together ? *)
       | Bop(Add, e, e') -> VInt(evalInt e env + evalInt e' env)
       | Bop(Mul, e, e') -> VInt(evalInt e env * evalInt e' env)
       | Bop(Sub, e, e') -> VInt(evalInt e env - evalInt e' env)
       | Bop(Div, e, e') -> VInt(evalInt e env / evalInt e' env)
       | Bop(Mod, e, e') -> VInt(evalInt e env mod evalInt e' env)
-        (* Binary Operands : Boolean Arith *)
+        (* Binary Operands : Boolean Arith *) (* Same ? *)
       | Bop(And, e, e') -> VBool(evalBool e env && evalBool e' env)
       | Bop(Or, e, e') -> VBool(evalBool e env || evalBool e' env)
       | Bop(Lt, e, e') -> VBool(evalInt e env < evalInt e' env)
@@ -100,13 +101,14 @@ let eval_prog (p: prog): value =
                         | VPtr ptr -> Hashtbl.find (findStrct ptr) expr
                         | _ -> assert false 
       | SetF(e, f , e') -> (* here check before anything the given expr intepretation *)
-                          let v = eval e' env in
-                          (* then check if the given ident is well assigned to a structure *)
-                          match eval e env with 
-                            (* and if so find the structure and replace its actual assigned expr *)
-                            | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
-                                          VUnit
-                            | _ -> assert false 
+                           let v = eval e' env in
+                           (* then check if the given ident is well assigned to a structure *)
+                           match eval e env with 
+                              (* and if so find the structure and replace its actual assigned expr *)
+                              | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
+                              | _ -> assert false  (* Not working but why ?! *)
+                          (* Error : This variant pattern is expected to have type value
+                                     There is no constructor SetF within type value *)
       (* Sequences *)
       | Seq(e, e') -> let _ = eval e env in 
                       eval e' env; 

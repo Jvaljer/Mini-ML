@@ -32,7 +32,28 @@
 %token EOF
 
 
-(*priorities must be defined*)
+(* listing all the priorities (might need to check the order) *)
+
+(* Starting with all the non associative tokens *)
+%nonassoc IN
+%nonassoc THEN 
+%nonassoc ELSE
+%nonassoc NOT
+%nonassoc LBRACE RBRACE
+%nonassoc LARROW 
+%nonassoc BOOL PARS IDENT CST 
+(* Then all the associative rules*)
+%left PLUS MINUS 
+%left MUL DIV 
+%left NEG 
+%left EQ NEQ 
+%left LT LE
+%left MOD 
+%left OR 
+%left AND 
+%left SEMI
+%right RARROW (* is associative (not as LARROW) *)
+
 
 %start program
 %type <Mml.prog> program

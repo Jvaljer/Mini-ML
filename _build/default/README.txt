@@ -158,8 +158,8 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       *       |      ~        |
-Fix Point  |    X    |    X     |       *       |      ~        |
+Structures |    X    |    X     |       X       |      *        |
+Fix Point  |    X    |    X     |       X       |      X        |
 
 ##### in-sighted Extensions #####
 
