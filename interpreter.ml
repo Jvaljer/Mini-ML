@@ -11,6 +11,7 @@ type value =
   | VBool  of bool
   | VUnit
   | VPtr   of int
+  | VList  of (int) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
@@ -123,7 +124,16 @@ let eval_prog (p: prog): value =
                                                 (* and finally return it *)
                                                 VPtr ptr
                           | _ -> assert false 
-
+      (* Integer List *)
+      | IntList(l) -> (* to interpret this we wanna return a VList *)
+                      let rec eval_list list = 
+                        match list with 
+                          | [] -> VList l
+                          | n::s -> let v = eval n env in 
+                                    if v <> VInt then assert false 
+                                    else eval_list s 
+                      in
+                      eval_list l
 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)

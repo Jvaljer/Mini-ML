@@ -42,6 +42,9 @@ type expr =
   | GetF  of expr * string
   | SetF  of expr * string * expr
   | Seq   of expr * expr
+  (* trying to add integer List -> then gonna try to add other type for lists
+                                -> and maybe list operator like concat or reverse  *)
+  | IntList  of (expr) list (* here we allow any expr but we are gonna check that all of them are integers *)
 
 type prog = {
     types: (string * strct) list;
