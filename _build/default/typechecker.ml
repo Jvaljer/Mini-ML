@@ -119,6 +119,15 @@ let type_prog prog =
     (* Fix Point *)
     | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
                       type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
+    (* integer list *)
+    | IntList(l) -> let rec typecheck_list list =  
+                      match list with 
+                        | [] -> TIntList (* if we ended the list then it's well an IntList typed expr *)
+                        | n::s -> check e TInt tenv; (* first we check if the first elem of the given list is well an integer *)
+                                  typecheck_list s  (* then we type check the following elements *)
+                      in 
+                      typecheck_list l
+    | ListOp(Rev, l) -> check l TIntList tenv; TIntList
   in
 
   type_expr prog.code TypEnv.empty

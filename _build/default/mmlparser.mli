@@ -9,7 +9,9 @@ type token =
   | TBOOL
   | SEMI
   | RPAR
+  | REV
   | REC
+  | RBRACKET
   | RBRACE
   | RARROW
   | PLUS
@@ -26,6 +28,7 @@ type token =
   | LPAR
   | LET
   | LE
+  | LBRACKET
   | LBRACE
   | LARROW
   | IN

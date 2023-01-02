@@ -158,8 +158,14 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       X       |      *        |
+Structures |    X    |    X     |       X       |   SetF bug    |
 Fix Point  |    X    |    X     |       X       |      X        |
+
+
+Extension I'm working on -> 
+  integers list declared as : let l = [0, 1, 2, 3, 4]
+  interpreted as IntList of (int) list
+  is it an expr or a s_expr ??? 
 
 ##### in-sighted Extensions #####
 

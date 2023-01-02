@@ -30,6 +30,7 @@
 %token LPAR RPAR LBRACE RBRACE
 (*lists*)
 %token LBRACKET RBRACKET
+%token REV
 (*End Of File*)
 %token EOF
 
@@ -56,6 +57,7 @@
 %left AND 
 %left SEMI
 %right RARROW (* is associative (not as LARROW) *)
+%left REV
 
 
 %start program
@@ -163,4 +165,8 @@ fun_arg:
   | LE    { Le } (* <= *)
   | AND   { And } (* && *)
   | OR    { Or } (* || *)
+;
+
+%inline listop:
+  | REV { Rev } (* rev *)
 ;

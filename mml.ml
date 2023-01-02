@@ -6,6 +6,7 @@ type typ =
   | TUnit
   | TFun of typ * typ
   | TStrct of string
+  | TIntList of (typ) list
   
 type strct = (string * typ * bool) list
 
@@ -26,6 +27,9 @@ type bop =
   | And 
   | Or
 
+type lop = 
+  | Rev (* rev(list) -> returns the list but reversed ? *)
+
 type expr =
   | Int   of int
   | Bool  of bool
@@ -45,6 +49,7 @@ type expr =
   (* trying to add integer List -> then gonna try to add other type for lists
                                 -> and maybe list operator like concat or reverse  *)
   | IntList  of (expr) list (* here we allow any expr but we are gonna check that all of them are integers *)
+  | ListOp of lop * expr 
 
 type prog = {
     types: (string * strct) list;

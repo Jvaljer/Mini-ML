@@ -28,6 +28,9 @@
 %token DOT COLON SEMI LARROW RARROW ASS 
 (*parenthesis*)
 %token LPAR RPAR LBRACE RBRACE
+(*lists*)
+%token LBRACKET RBRACKET
+%token REV
 (*End Of File*)
 %token EOF
 
@@ -42,6 +45,7 @@
 %nonassoc LBRACE RBRACE
 %nonassoc LARROW 
 %nonassoc BOOL PARS IDENT CST 
+%nonassoc LBRACKET RBRACKET (*yet cannot do list of list so cannot be associative*)
 (* Then all the associative rules*)
 %left PLUS MINUS 
 %left MUL DIV 
@@ -53,6 +57,7 @@
 %left AND 
 %left SEMI
 %right RARROW (* is associative (not as LARROW) *)
+%left REV
 
 
 %start program
@@ -96,7 +101,7 @@ s_expr:
   | n=CST    { Int(n) } (* n *)
   | b=BOOL   { Bool(b) } (* true & false *)
   | PARS     { Unit } (* () *)
-  | x=IDENT { Var(x) } (* ident *)
+  | x=IDENT  { Var(x) } (* ident *)
   | se=s_expr DOT f=IDENT 
              { GetF(se, f) } (* s_expr.ident *)
   | LBRACE id_list=nonempty_list(id_def) RBRACE 
@@ -131,8 +136,13 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
+  | LBRACKET elems=list(list_elem) RBRACKET 
+                              { IntList(elems) }
 ;
 
+list_elem:
+  | n=CST { Int(n) }
+;
 fun_arg:
   (* ( ident : type ) *)
   | LPAR id=IDENT COLON t=typ RPAR 
@@ -155,4 +165,8 @@ fun_arg:
   | LE    { Le } (* <= *)
   | AND   { And } (* && *)
   | OR    { Or } (* || *)
+;
+
+%inline listop:
+  | REV { Rev } (* rev *)
 ;

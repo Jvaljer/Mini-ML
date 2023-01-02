@@ -11,6 +11,7 @@ type value =
   | VBool  of bool
   | VUnit
   | VPtr   of int
+  | VList  of (int) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
@@ -23,6 +24,16 @@ let print_value = function
   | VBool b -> Printf.printf "%b\n" b
   | VUnit   -> Printf.printf "()\n"
   | VPtr p  -> Printf.printf "@%d\n" p
+  | VList l -> let printList list = 
+                 Printf.printf "[";
+                 let rec printing list' =
+                   match list with
+                     | [] -> Printf.printf "]"
+                     | n::s -> Printf.printf "%d" n; printing s
+                 in 
+                 printing list
+               in
+               printList l 
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -103,10 +114,11 @@ let eval_prog (p: prog): value =
       | SetF(e, f , e') -> (* here check before anything the given expr intepretation *)
                            let v = eval e' env in
                            (* then check if the given ident is well assigned to a structure *)
-                           match eval e env with 
-                              (* and if so find the structure and replace its actual assigned expr *)
-                              | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
-                              | _ -> assert false  (* Not working but why ?! *)
+                           ( match eval e env with 
+                               (* and if so find the structure and replace its actual assigned expr *)
+                               | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
+                               | _ -> assert false  (* Not working but why ?! *) )
+                           VUnit
                           (* Error : This variant pattern is expected to have type value
                                      There is no constructor SetF within type value *)
       (* Sequences *)
@@ -123,7 +135,16 @@ let eval_prog (p: prog): value =
                                                 (* and finally return it *)
                                                 VPtr ptr
                           | _ -> assert false 
-
+      (* Integer List *)
+      | IntList(l) -> (* to interpret this we wanna return a VList *)
+                      let rec eval_list list = 
+                        match list with 
+                          | [] -> VList l
+                          | n::s -> let v = eval n env in 
+                                    if v <> VInt then assert false 
+                                    else eval_list s 
+                      in
+                      eval_list l
 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)

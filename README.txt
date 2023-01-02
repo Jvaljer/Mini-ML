@@ -158,7 +158,7 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       X       |      *        |
+Structures |    X    |    X     |       X       |   SetF bug    |
 Fix Point  |    X    |    X     |       X       |      X        |
 
 

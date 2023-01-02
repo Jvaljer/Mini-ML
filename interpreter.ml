@@ -24,6 +24,16 @@ let print_value = function
   | VBool b -> Printf.printf "%b\n" b
   | VUnit   -> Printf.printf "()\n"
   | VPtr p  -> Printf.printf "@%d\n" p
+  | VList l -> let printList list = 
+                 Printf.printf "[";
+                 let rec printing list' =
+                   match list with
+                     | [] -> Printf.printf "]"
+                     | n::s -> Printf.printf "%d" n; printing s
+                 in 
+                 printing list
+               in
+               printList l 
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -104,10 +114,10 @@ let eval_prog (p: prog): value =
       | SetF(e, f , e') -> (* here check before anything the given expr intepretation *)
                            let v = eval e' env in
                            (* then check if the given ident is well assigned to a structure *)
-                           match eval e env with 
-                              (* and if so find the structure and replace its actual assigned expr *)
-                              | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
-                              | _ -> assert false  (* Not working but why ?! *)
+                           ( match eval e env with 
+                               (* and if so find the structure and replace its actual assigned expr *)
+                               | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
+                               | _ -> assert false  (* Not working but why ?! *) )
                           (* Error : This variant pattern is expected to have type value
                                      There is no constructor SetF within type value *)
       (* Sequences *)
@@ -134,7 +144,7 @@ let eval_prog (p: prog): value =
                                     else eval_list s 
                       in
                       eval_list l
-
+      | ListOp(Rev, l) -> assert false 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

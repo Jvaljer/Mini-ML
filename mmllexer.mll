@@ -30,6 +30,7 @@
         (*boolean values*)
         "true", BOOL(true);
         "false", BOOL(false);
+        "rev", REV;
       ] ;
     fun s ->
       try  Hashtbl.find h s

@@ -30,6 +30,7 @@
         (*boolean values*)
         "true", BOOL(true);
         "false", BOOL(false);
+        "rev", REV;
       ] ;
     fun s ->
       try  Hashtbl.find h s
@@ -81,6 +82,9 @@ rule token = parse
   | ")"  { RPAR }
   | "{"  { LBRACE }
   | "}"  { RBRACE }
+  (* lists starts and end *)
+  | "["  { LBRACKET }
+  | "]"  { RBRACKET }
   (*any other word/character + EOF*)
   | _    { raise (Lexing_error ("unknown character : " ^ (lexeme lexbuf))) }
   | eof  { EOF }
