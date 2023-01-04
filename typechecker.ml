@@ -115,7 +115,7 @@ let type_prog prog =
                             | _ -> assert false )
     (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
-                     type_expr e' tenv;
+                     type_expr e' tenv; 
     (* Fix Point *)
     | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
                       type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)

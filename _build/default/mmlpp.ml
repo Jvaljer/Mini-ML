@@ -54,7 +54,7 @@ let rec print_expr ppf = function
   | GetF(e, x) -> fprintf ppf "(%a).%s" print_expr e x
   | SetF(e1, x, e2) -> fprintf ppf "(%a).%s <- %a" print_expr e1 x print_expr e2
   | Seq(e1, e2) -> fprintf ppf "%a; %a" print_expr e1 print_expr e2
-  | IntList l -> fprintf ppf "[%a]" print_list l
+  | IntList l -> fprintf ppf "@[%a@]" print_list l
   | ListOp(op,l) -> fprintf ppf "%a(%a)" lop_to_string op print_list l
 and print_defs ppf = function
   | [] -> fprintf ppf ""

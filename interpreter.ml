@@ -107,33 +107,33 @@ let eval_prog (p: prog): value =
                    let structHash = Hashtbl.create (List.length s) in 
                    storeStruct s structHash
       | GetF(s, expr) -> (* first we wanna match the return value of the expr *)
-                      match eval s env with 
+                      ( match eval s env with 
                         (* if we are intepreting a structure as wanted then inteprete the given expr*)
-                        | VPtr ptr -> Hashtbl.find (findStrct ptr) expr
-                        | _ -> assert false 
+                          | VPtr ptr -> Hashtbl.find (findStrct ptr) expr
+                          | _ -> assert false )
       | SetF(e, f , e') -> (* here check before anything the given expr intepretation *)
                            let v = eval e' env in
                            (* then check if the given ident is well assigned to a structure *)
                            ( match eval e env with 
                                (* and if so find the structure and replace its actual assigned expr *)
-                               | VPtr ptr -> Hashtbl.replace (findStrct ptr) f s'
-                               | _ -> assert false  (* Not working but why ?! *) )
+                               | VPtr ptr -> Hashtbl.replace (findStrct ptr) f v; VUnit
+                               | _ -> assert false )
                           (* Error : This variant pattern is expected to have type value
                                      There is no constructor SetF within type value *)
       (* Sequences *)
-      | Seq(e, e') -> let _ = eval e env in 
-                      eval e' env; 
+      (*| Seq(e, e') -> let _ = eval e env in
+                      eval e' env; *)
       (* Fix Point *)
       | Fix(f, t, e) -> (* e shall be a Fun so we match it first *)
-                        match eval e env with 
-                          | Fun(id, _, expr) -> (* then we wanna get its value *)
-                                                let v = VClos(id, expr, env) in 
-                                                (* and add it to the Hashtbl in order to be able to call it later *)
-                                                let ptr = new_ptr() in
-                                                Hashtbl.add mem ptr v env;
-                                                (* and finally return it *)
-                                                VPtr ptr
-                          | _ -> assert false 
+                        ( match eval e env with 
+                            | Fun(id, _, expr) -> (* then we wanna get its value *)
+                                                  let v = VClos(id, expr, env) in 
+                                                  (* and add it to the Hashtbl in order to be able to call it later *)
+                                                  let ptr = new_ptr() in
+                                                  Hashtbl.add mem ptr v env;
+                                                  (* and finally return it *)
+                                                  VPtr ptr
+                            | _ -> assert false )
       (* Integer List *)
       | IntList(l) -> (* to interpret this we wanna return a VList *)
                       let rec eval_list list = 

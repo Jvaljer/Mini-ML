@@ -38,6 +38,8 @@
 (* listing all the priorities (might need to check the order) *)
 
 (* Starting with all the non associative tokens *)
+(*
+%nonassoc IF
 %nonassoc IN
 %nonassoc THEN 
 %nonassoc ELSE
@@ -57,7 +59,21 @@
 %left AND 
 %left SEMI
 %right RARROW (* is associative (not as LARROW) *)
-%left REV
+%left REV 
+*)
+
+%nonassoc NOT
+%left DIV MOD MUL
+%left PLUS MINUS 
+%left ASS
+%nonassoc LPAR RPAR LBRACE RBRACE (* are rights needed ? *)
+%nonassoc IF THEN ELSE 
+%left OR 
+%left AND
+%nonassoc LT LE EQ NEQ
+%left SEMI (* or nonassoc ? *)
+
+
 
 
 %start program
@@ -138,6 +154,8 @@ expr:
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
   | LBRACKET elems=list(list_elem) RBRACKET 
                               { IntList(elems) }
+  | op=listop LPAR e=expr RPAR SEMI
+                              { ListOp(op,e) }
 ;
 
 list_elem:
