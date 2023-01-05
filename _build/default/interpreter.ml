@@ -121,8 +121,8 @@ let eval_prog (p: prog): value =
                           (* Error : This variant pattern is expected to have type value
                                      There is no constructor SetF within type value *)
       (* Sequences *)
-      (*| Seq(e, e') -> let _ = eval e env in
-                      eval e' env; *)
+      | Seq(e, e') -> let _ = eval e env in
+                      eval e' env;
       (* Fix Point *)
       | Fix(f, t, e) -> (* e shall be a Fun so we match it first *)
                         ( match eval e env with 
@@ -133,7 +133,7 @@ let eval_prog (p: prog): value =
                                                   Hashtbl.add mem ptr v env;
                                                   (* and finally return it *)
                                                   VPtr ptr
-                            | _ -> assert false )
+                            | _ -> assert false ) 
       (* Integer List *)
       | IntList(l) -> (* to interpret this we wanna return a VList *)
                       let rec eval_list list = 

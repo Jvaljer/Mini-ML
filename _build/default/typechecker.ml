@@ -122,7 +122,7 @@ let type_prog prog =
     (* integer list *)
     | IntList(l) -> let rec typecheck_list list =  
                       match list with 
-                        | [] -> TIntList (* if we ended the list then it's well an IntList typed expr *)
+                        | [] -> TIntList l (* if we ended the list then it's well an IntList typed expr *)
                         | n::s -> check e TInt tenv; (* first we check if the first elem of the given list is well an integer *)
                                   typecheck_list s  (* then we type check the following elements *)
                       in 
