@@ -152,15 +152,8 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
-  | LBRACKET elems=list(list_elem) RBRACKET 
-                              { IntList(elems) }
-  | op=listop LPAR e=expr RPAR SEMI
-                              { ListOp(op,e) }
 ;
 
-list_elem:
-  | n=CST { Int(n) }
-;
 fun_arg:
   (* ( ident : type ) *)
   | LPAR id=IDENT COLON t=typ RPAR 

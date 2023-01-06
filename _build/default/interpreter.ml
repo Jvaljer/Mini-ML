@@ -27,7 +27,7 @@ let print_value = function
   | VList l -> let printList list = 
                  Printf.printf "[";
                  let rec printing list' =
-                   match list with
+                   match list' with
                      | [] -> Printf.printf "]"
                      | n::s -> Printf.printf "%d" n; printing s
                  in 
@@ -124,27 +124,17 @@ let eval_prog (p: prog): value =
       | Seq(e, e') -> let _ = eval e env in
                       eval e' env;
       (* Fix Point *)
-      | Fix(f, t, e) -> (* e shall be a Fun so we match it first *)
-                        ( match eval e env with 
-                            | Fun(id, _, expr) -> (* then we wanna get its value *)
-                                                  let v = VClos(id, expr, env) in 
-                                                  (* and add it to the Hashtbl in order to be able to call it later *)
-                                                  let ptr = new_ptr() in
-                                                  Hashtbl.add mem ptr v env;
-                                                  (* and finally return it *)
+      | Fix(f, _, e) -> (* e shall be a Fun so we match it first *)
+                        ( match e with 
+                            | Fun(id, _, expr) -> (* first we need to define a new environment corresponding to the whole function's values *)
+                                                  let ptr = new_ptr () in
+                                                  let new_env = Env.add f (VPtr ptr) env in 
+                                                  (* then we must get the value f(x) = x *)
+                                                  let v = VClos(id,expr,new_env) in
+                                                  (* and finally add it to the heap *)
+                                                  Hashtbl.add mem ptr v;
                                                   VPtr ptr
                             | _ -> assert false ) 
-      (* Integer List *)
-      | IntList(l) -> (* to interpret this we wanna return a VList *)
-                      let rec eval_list list = 
-                        match list with 
-                          | [] -> VList l
-                          | n::s -> let v = eval n env in 
-                                    if v <> VInt then assert false 
-                                    else eval_list s 
-                      in
-                      eval_list l
-      | ListOp(Rev, l) -> assert false 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

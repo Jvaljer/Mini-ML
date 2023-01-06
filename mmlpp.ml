@@ -9,7 +9,6 @@ let rec typ_to_string = function
   | TFun(typ1, typ2) -> 
      Printf.sprintf "(%s) -> %s" (typ_to_string typ1) (typ_to_string typ2)
   | TStrct s -> s
-  | TIntList _ -> "int[]"
 
 let rec print_fields ppf = function
   | [] -> fprintf ppf ""
@@ -52,15 +51,9 @@ let rec print_expr ppf = function
   | GetF(e, x) -> fprintf ppf "(%a).%s" print_expr e x
   | SetF(e1, x, e2) -> fprintf ppf "(%a).%s <- %a" print_expr e1 x print_expr e2
   | Seq(e1, e2) -> fprintf ppf "%a; %a" print_expr e1 print_expr e2
-  | IntList l -> fprintf ppf "@[%a@]" print_list l
-  | ListOp(Rev,l) -> fprintf ppf "rev(%a)" print_expr l
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l
-and print_list ppf = function
-  | [] -> fprintf ppf ""
-  | (Int n)::s -> fprintf ppf "%i, %a" n print_list s
-  | e::s -> fprintf ppf "%a, %a" print_expr e print_list s
 
 let print_prog ppf prog =
   fprintf ppf "%a@.%a@." print_types prog.types print_expr prog.code

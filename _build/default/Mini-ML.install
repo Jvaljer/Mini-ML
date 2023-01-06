@@ -1,0 +1,11 @@
+lib: [
+  "_build/install/default/lib/Mini-ML/META"
+  "_build/install/default/lib/Mini-ML/dune-package"
+]
+bin: [
+  "_build/install/default/bin/debug"
+  "_build/install/default/bin/miniml"
+]
+doc: [
+  "_build/install/default/doc/Mini-ML/README.txt"
+]

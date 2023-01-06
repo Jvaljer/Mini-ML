@@ -169,15 +169,7 @@ Extension I'm working on ->
 
 ##### in-sighted Extensions #####
 
-Global Analysis improvements such as :
-  Analysis Refinements -> 
-    returning specifics error messages
-    when not finding an ident, proposing (in an error message) a possible matching ident (name similitaries)
-
-General Ameliorations such as :
-  Printer improvement to make the file as readable & natural as possible
-
-Adding contents to the langage :
-  arrays (homogens)
-  enumerated types 
-  () function argument (empty)
+Int Arrays -> already have an idea on how to do 
+Tuple -> 2 same typed values 
+Matching pattern ??
+Correct Errors implementation
