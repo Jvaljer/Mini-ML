@@ -30,7 +30,8 @@
 %token LPAR RPAR LBRACE RBRACE
 (*lists*)
 %token LBRACKET RBRACKET
-%token REV
+%token ARRAY
+%token COMMA
 (*End Of File*)
 %token EOF
 
@@ -66,7 +67,7 @@
 %left DIV MOD MUL
 %left PLUS MINUS 
 %left ASS
-%nonassoc LPAR RPAR LBRACE RBRACE (* are rights needed ? *)
+%nonassoc LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET(* are rights needed ? *)
 %nonassoc IF THEN ELSE 
 %left OR 
 %left AND
@@ -152,7 +153,13 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
+  | LET ARRAY id=IDENT ASS LBRACKET l=list(list_elems) RBRACKET SEMI 
+                              { IntArray(ListId(id),l) } (* let array l = [...] *)
 ;
+
+list_elems:
+  | n=CST COMMA { Int(n) }
+  | n=CST { Int(n) }
 
 fun_arg:
   (* ( ident : type ) *)

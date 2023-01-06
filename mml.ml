@@ -42,6 +42,10 @@ type expr =
   | GetF  of expr * string
   | SetF  of expr * string * expr
   | Seq   of expr * expr
+  (* Int Array Extension *)
+  | ListId of string
+  | IntArray of string * (expr) list
+  | GetI  of expr 
 
 type prog = {
     types: (string * strct) list;

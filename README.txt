@@ -169,7 +169,15 @@ Extension I'm working on ->
 
 ##### in-sighted Extensions #####
 
-Int Arrays -> already have an idea on how to do 
+Int Arrays -> IntArray -> " let array l = [ 0, 1, 2, 3] "
+                          string * (expr) list 
+                          "l" * [0 1 2 3] 
+              GetI -> " let n = l.(int) "
+                      expr (shall be int)
+                      & interpreted as the nth value of l
+              
+
+
 Tuple -> 2 same typed values 
 Matching pattern ??
 Correct Errors implementation
