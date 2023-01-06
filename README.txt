@@ -169,15 +169,20 @@ Extension I'm working on ->
 
 ##### in-sighted Extensions #####
 
-Int Arrays -> IntArray -> " let array l = [ 0, 1, 2, 3] "
-                          string * (expr) list 
-                          "l" * [0 1 2 3] 
-              GetI -> " let n = l.(int) "
-                      expr (shall be int)
-                      & interpreted as the nth value of l
-              
+Int Arrays : (first overall idea)
+    as an expr ? ==> mml.ml -  ArrayInt of string * (int/expr) list
+    recognize as ? ==> mmlparser.mly -  let array l = [int,int,int, ... ,];
+                                        LET ARRAY id=IDENT ASS LBRACKET elems=list_elm RBRACKET SEMI { ArrayInt(id,elems) }
+                                        list_elm: | n=CST COMMA { Int(n) } (*how to make the last elem without comma ?*)
+    typechecked as ? ==> typechecker.ml -  must check for each element in 'elems' if it's well typed TInt 
+                                           then return the type TArrayInt (without any arhument !)
+    interpreted as ? ==> interpreter.ml -  return a list of VInt ? (might use (VInt) list) 
+                                           a VArrayInt could be nice...
+    printed as ? ==> rly don't wanna do this... 
 
+    ANOTHER COMPLETION :: maybe could add something to get a special element ? like GetI, how to do ???
 
-Tuple -> 2 same typed values 
-Matching pattern ??
-Correct Errors implementation
+Tuple -> 2 same typed values (maybe not that interesting but why not)
+Matching pattern ?? (seems complicated)
+Correct Errors implementation (shall not be very hard but seems important to do...)
+Better printing (don't want to do that at all but might be better)

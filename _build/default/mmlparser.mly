@@ -30,7 +30,8 @@
 %token LPAR RPAR LBRACE RBRACE
 (*lists*)
 %token LBRACKET RBRACKET
-%token REV
+%token ARRAY
+%token COMMA
 (*End Of File*)
 %token EOF
 
@@ -62,16 +63,21 @@
 %left REV 
 *)
 
-%nonassoc NOT
-%left DIV MOD MUL
-%left PLUS MINUS 
-%left ASS
-%nonassoc LPAR RPAR LBRACE RBRACE (* are rights needed ? *)
-%nonassoc IF THEN ELSE 
-%left OR 
+%nonassoc IN
+%right RARROW 
+%nonassoc THEN
+%nonassoc ELSE 
+%left EQ NEQ
+%left LT LE
+%left PLUS MINUS
+%left MUL DIV 
+%left MOD
+%left OR
 %left AND
-%nonassoc LT LE EQ NEQ
-%left SEMI (* or nonassoc ? *)
+%nonassoc LPAR LBRACE 
+%nonassoc PARS IDENT CST BOOL 
+%left SEMI
+%nonassoc LARROW
 
 
 
@@ -152,6 +158,12 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
+  | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET SEMI 
+                              { ArrayInt(id,elems) }
+;
+
+list_elem:
+  | n=CST COMMA { n }
 ;
 
 fun_arg:
@@ -178,6 +190,3 @@ fun_arg:
   | OR    { Or } (* || *)
 ;
 
-%inline listop:
-  | REV { Rev } (* rev *)
-;

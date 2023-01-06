@@ -9,7 +9,6 @@ type token =
   | TBOOL
   | SEMI
   | RPAR
-  | REV
   | REC
   | RBRACKET
   | RBRACE
@@ -41,9 +40,11 @@ type token =
   | DOT
   | DIV
   | CST of (int)
+  | COMMA
   | COLON
   | BOOL of (bool)
   | ASS
+  | ARRAY
   | AND
 
 (* This exception is raised by the monolithic API functions. *)

@@ -119,6 +119,15 @@ let type_prog prog =
     (* Fix Point *)
     | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
                       type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
+    (* Integer Arrays *)
+    | ArrayInt(id,l) -> (* we must check if each element of the list is well an integer and if we are getting to the end then returns the Array Type *)
+                        let rec arrayTypeCheck = function 
+                          | [] -> TArrayInt
+                          | n::s -> (* for each element we wanna chekc if it's well an integer, and then check the other elements *)
+                                    check n TInt tenv;
+                                    arrayTypeCheck s
+                        in
+                        arrayTypeCheck l
   in
 
   type_expr prog.code TypEnv.empty

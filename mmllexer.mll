@@ -82,9 +82,9 @@ rule token = parse
   | ")"  { RPAR }
   | "{"  { LBRACE }
   | "}"  { RBRACE }
-  (*arrays*)
+  (*arrays extension*)
   | "["  { LBRACKET }
-  | "]"  { RBRACKET}
+  | "]"  { RBRACKET }
   | ","  { COMMA }
   (*any other word/character + EOF*)
   | _    { raise (Lexing_error ("unknown character : " ^ (lexeme lexbuf))) }

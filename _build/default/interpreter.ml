@@ -11,7 +11,7 @@ type value =
   | VBool  of bool
   | VUnit
   | VPtr   of int
-  | VList  of (int) list
+  | VArrayInt  of (int) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
@@ -24,16 +24,16 @@ let print_value = function
   | VBool b -> Printf.printf "%b\n" b
   | VUnit   -> Printf.printf "()\n"
   | VPtr p  -> Printf.printf "@%d\n" p
-  | VList l -> let printList list = 
-                 Printf.printf "[";
-                 let rec printing list' =
-                   match list' with
-                     | [] -> Printf.printf "]"
-                     | n::s -> Printf.printf "%d" n; printing s
-                 in 
-                 printing list
-               in
-               printList l 
+  | VArrayInt l -> let printList list = 
+                     Printf.printf "[";
+                     let rec printing list' =
+                       match list' with
+                         | [] -> Printf.printf "]"
+                         | n::s -> Printf.printf "%d" n; printing s
+                     in 
+                     printing list
+                   in
+                   printList l 
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -135,6 +135,17 @@ let eval_prog (p: prog): value =
                                                   Hashtbl.add mem ptr v;
                                                   VPtr ptr
                             | _ -> assert false ) 
+      (* Integer Array *)
+      | ArrayInt(id,l) -> let rec storeArray list ret =
+                            match list with 
+                              | [] -> VArrayInt ret
+                              | n::s -> ( match n with 
+                                            | Int n' -> ret@[n']; VUnit;
+                                                        storeArray s ret
+                                            | _ -> assert false )
+                              | _ -> assert false
+                          in
+                          storeArray l []
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

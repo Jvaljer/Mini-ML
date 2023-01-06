@@ -6,6 +6,7 @@ type typ =
   | TUnit
   | TFun of typ * typ
   | TStrct of string
+  | TArrayInt 
   
 type strct = (string * typ * bool) list
 
@@ -42,6 +43,8 @@ type expr =
   | GetF  of expr * string
   | SetF  of expr * string * expr
   | Seq   of expr * expr
+  (* extensions *)
+  | ArrayInt of string * (int) list (* int list or expr list ??? *)
 
 type prog = {
     types: (string * strct) list;
