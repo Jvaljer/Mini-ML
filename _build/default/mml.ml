@@ -6,7 +6,6 @@ type typ =
   | TUnit
   | TFun of typ * typ
   | TStrct of string
-  | TArrayInt 
   | TMatch
   | TAnything
   | TArray of typ
@@ -33,6 +32,9 @@ type bop =
 type luop =
   | Len
 
+type lbop = 
+  | Concat 
+
 type expr =
   | Int   of int
   | Bool  of bool
@@ -50,9 +52,9 @@ type expr =
   | SetF  of expr * string * expr
   | Seq   of expr * expr
   (* extensions *)
-  | ArrayInt of string * (expr) list
   | Array of string * typ * (expr) list
   | ListUop of luop * expr
+  | ListBop of lbop * expr * expr 
   | MatchPattern of expr * (expr) list
   | MatchPossibility of expr * expr 
   | Anything  

@@ -44,6 +44,7 @@ type token =
   | DOT
   | DIV
   | CST of (int)
+  | CONCAT
   | COMMA
   | COLON
   | BOOL of (bool)

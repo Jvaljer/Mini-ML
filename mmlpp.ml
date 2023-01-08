@@ -10,7 +10,6 @@ let rec typ_to_string = function
      Printf.sprintf "(%s) -> %s" (typ_to_string typ1) (typ_to_string typ2)
   | TStrct s -> s
   (* Extensions *)
-  | TArrayInt -> "int[]"
   | TMatch -> "match"
   | TAnything -> "anything"
   | TArray t -> Printf.sprintf "%s[]" (typ_to_string t) 
@@ -41,6 +40,8 @@ let bop_to_string = function
   | Or  -> "||"
 let luop_to_string = function
   | Len -> "len"
+let lbop_to_string = function
+  | Concat -> "@"
 
 let rec print_expr ppf = function
   | Int n -> fprintf ppf "%i" n
@@ -59,12 +60,12 @@ let rec print_expr ppf = function
   | SetF(e1, x, e2) -> fprintf ppf "(%a).%s <- %a" print_expr e1 x print_expr e2
   | Seq(e1, e2) -> fprintf ppf "%a; @[%a@]" print_expr e1 print_expr e2
   (* Extension *)
-  | ArrayInt(id, l) -> fprintf ppf "%s=%a" id print_array l
   | MatchPossibility(e,e') -> fprintf ppf "| %a -> %a" print_expr e print_expr e'
   | MatchPattern(e,poss) -> fprintf ppf "match %a with \n %a" print_expr e print_match poss
   | Anything -> fprintf ppf "_"
   | Array(id,t,l) -> fprintf ppf "%s:%s=%a" id (typ_to_string t) print_array l 
   | ListUop(op,id) -> fprintf ppf "%s(%a)" (luop_to_string op) print_expr id
+  | ListBop(op,id,id') -> fprintf ppf "%a%s%a" print_expr id (lbop_to_string op) print_expr id'
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l

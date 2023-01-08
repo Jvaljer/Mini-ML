@@ -11,7 +11,6 @@ type value =
   | VBool  of bool
   | VUnit
   | VPtr   of int
-  | VArrayInt  of (int) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
@@ -25,16 +24,6 @@ let print_value = function
   | VBool b -> Printf.printf "%b\n" b
   | VUnit   -> Printf.printf "()\n"
   | VPtr p  -> Printf.printf "@%d\n" p
-  | VArrayInt l -> let printList list = 
-                     Printf.printf "[";
-                     let rec printing list' =
-                       match list' with
-                         | [] -> Printf.printf "]"
-                         | n::s -> Printf.printf "%d" n; printing s
-                     in 
-                     printing list
-                   in
-                   printList l
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -55,9 +44,15 @@ let eval_prog (p: prog): value =
         | _ -> assert false 
   in
   
-  let findArray ptr = 
+  let findArrayValues ptr = 
       match Hashtbl.find mem ptr with 
         | VArray(_,l,_) -> l
+        | _ -> assert false
+  in
+
+  let findArrayInfo ptr = 
+      match Hashtbl.find mem ptr with
+        | VArray(id,l,lenv) -> (id,l,lenv)
         | _ -> assert false
   in
 
@@ -142,14 +137,7 @@ let eval_prog (p: prog): value =
                                                   Hashtbl.add mem ptr v;
                                                   VPtr ptr
                             | _ -> assert false ) 
-      (* Integer Array *)
-      | ArrayInt(_,l) -> let rec storeArray list ret =
-                            ( match list with 
-                                | [] -> VArrayInt ret
-                                | (Int n)::s -> storeArray s (n::ret)
-                                | _ -> assert false )
-                          in
-                          storeArray l []
+      
       (* Matching Pattern *)
       | MatchPattern(e, l) -> let eval_e = eval e env in 
                               let rec match_expr list = 
@@ -176,7 +164,7 @@ let eval_prog (p: prog): value =
                         in
                         store l [] 
       | ListUop(Len,l_id) -> ( match eval l_id env with
-                                 | VPtr ptr -> let l = findArray ptr in
+                                 | VPtr ptr -> let l = findArrayValues ptr in
                                                let rec length cpt list =
                                                  ( match list with
                                                      | [] -> VInt cpt 
@@ -184,6 +172,14 @@ let eval_prog (p: prog): value =
                                                in
                                                length 0 l
                                  | _ -> assert false )
+      | ListBop(Concat,l_id,l_id') -> ( match eval l_id env, eval l_id' env with
+                                          | VPtr ptr, VPtr ptr' -> let l = findArrayValues ptr in
+                                                                   let l' = findArrayValues ptr' in
+                                                                   let p = new_ptr () in 
+                                                                   let (id,_,_) = findArrayInfo ptr in 
+                                                                   Hashtbl.add mem ptr (VArray(id, l@l', env));
+                                                                   VPtr p
+                                          | _ -> assert false )
                              
 
   (* Interpreting the Expr when it's supposed to be an Integer *)

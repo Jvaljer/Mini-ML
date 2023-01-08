@@ -41,6 +41,7 @@ type token =
   | DOT
   | DIV
   | CST of int
+  | CONCAT
   | COMMA
   | COLON
   | BOOL of bool
@@ -65,6 +66,7 @@ val xv_list_type_def_ : (string * Mml.strct) list
 val xv_list_list_elem_ : Mml.expr list
 val xv_list_fun_arg_ : (string * Mml.typ) list
 val xv_l_unop : Mml.luop
+val xv_l_binop : Mml.lbop
 val xv_id_def : string * Mml.expr
 val xv_fun_arg : string * Mml.typ
 val xv_expr : Mml.expr

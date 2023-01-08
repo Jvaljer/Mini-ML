@@ -89,6 +89,7 @@ rule token = parse
   | "["  { LBRACKET }
   | "]"  { RBRACKET }
   | ","  { COMMA }
+  | "@"  { CONCAT }
   (*match pattern*)
   | "|"  { SELECT }
   | "_"  { ANYTHING }

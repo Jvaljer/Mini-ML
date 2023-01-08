@@ -33,6 +33,7 @@
 %token ARRAY
 %token COMMA
 %token LEN
+%token CONCAT
 (*match pattern*)
 %token MATCH 
 %token WITH 
@@ -162,13 +163,13 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
-  | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET  
-                              { ArrayInt(id,elems) }
   | MATCH e=expr WITH possibilities=nonempty_list(matching) 
                               { MatchPattern(e,possibilities) } (* e is an expr and poss must be (expr*expr) list *)
   | LET ARRAY COLON t=typ id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET
                               { Array(id,t,elems) }
-  | op=l_unop l=s_expr          { ListUop(op,l) }
+  | op=l_unop l=s_expr        { ListUop(op,l) }
+  | l1=s_expr op=l_binop l2=s_expr
+                              { ListBop(op,l1,l2) }
 ;
 
 matching:
@@ -207,3 +208,6 @@ fun_arg:
 
 %inline l_unop:
   | LEN   { Len }
+
+%inline l_binop:
+  | CONCAT { Concat }

@@ -119,15 +119,6 @@ let type_prog prog =
     (* Fix Point *)
     | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
                       type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
-    (* Integer Arrays *)
-    | ArrayInt(_,l) -> (* we must check if each element of the list is well an integer and if we are getting to the end then returns the Array Type *)
-                        let rec arrayTypeCheck = function 
-                          | [] -> TArrayInt
-                          | n::s -> (* for each element we wanna chekc if it's well an integer, and then check the other elements *)
-                                    check n TInt tenv;
-                                    arrayTypeCheck s
-                        in
-                        arrayTypeCheck l
     (* Matching Pattern *)
     | MatchPattern(e, l) -> (* here, we want to test if in the possibilities list there's AT LEAST on 'Anything' or one 'same typed' expr *)
                             let type_e = type_expr e tenv in 
@@ -159,6 +150,12 @@ let type_prog prog =
     | ListUop(Len,l) -> ( match type_expr l tenv with 
                             | TArray _ -> TInt 
                             | t_err -> error (Printf.sprintf "expr is not a list, typed as %s" (Mmlpp.typ_to_string t_err)) )
+    | ListBop(Concat,l,l') -> ( match type_expr l tenv, type_expr l' tenv with 
+                                  | TArray t, TArray t' -> if t<>t' then 
+                                                             error (Printf.sprintf "both list aren't same typed -> %s <> %s" (Mmlpp.typ_to_string t) (Mmlpp.typ_to_string t'))
+                                                           else
+                                                             TArray t 
+                                  | t_err,t_err' -> error (Printf.sprintf "at least one of the 2 list isn't well Array typed : %s %s" (Mmlpp.typ_to_string t_err) (Mmlpp.typ_to_string t_err')) )
   in
 
   type_expr prog.code TypEnv.empty
