@@ -162,11 +162,10 @@ Structures |    X    |    X     |       X       |      X        |
 Fix Point  |    X    |    X     |       X       |      X        |
 
 
-Extensions I added : 
-  Integer Arrays (only declaration...)
+Extensions I added :
   Matching Pattern 
   Correct Errors 
-  Uniform Arrays (only declaration...)
+  Uniform Arrays (only declaration...) with Len, Eq & Concat Operand
 
 ##### in-sighted Extensions #####
 
