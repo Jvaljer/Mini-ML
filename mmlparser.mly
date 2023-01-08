@@ -163,7 +163,7 @@ expr:
 ;
 
 list_elem:
-  | n=CST COMMA { n }
+  | n=s_expr COMMA { n }
 ;
 
 fun_arg:

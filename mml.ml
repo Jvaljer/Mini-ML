@@ -44,7 +44,7 @@ type expr =
   | SetF  of expr * string * expr
   | Seq   of expr * expr
   (* extensions *)
-  | ArrayInt of string * (int) list (* int list or expr list ??? *)
+  | ArrayInt of string * (expr) list (* int list or expr list ??? *)
 
 type prog = {
     types: (string * strct) list;

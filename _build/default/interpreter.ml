@@ -136,14 +136,11 @@ let eval_prog (p: prog): value =
                                                   VPtr ptr
                             | _ -> assert false ) 
       (* Integer Array *)
-      | ArrayInt(id,l) -> let rec storeArray list ret =
+      | ArrayInt(_,l) -> let rec storeArray list ret =
                             match list with 
                               | [] -> VArrayInt ret
-                              | n::s -> ( match n with 
-                                            | Int n' -> ret@[n']; VUnit;
-                                                        storeArray s ret
-                                            | _ -> assert false )
-                              | _ -> assert false
+                              | (Int n)::s -> storeArray s (n::ret)
+                              | _ -> assert false 
                           in
                           storeArray l []
 

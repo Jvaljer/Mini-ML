@@ -9,6 +9,8 @@ let rec typ_to_string = function
   | TFun(typ1, typ2) -> 
      Printf.sprintf "(%s) -> %s" (typ_to_string typ1) (typ_to_string typ2)
   | TStrct s -> s
+  (* Extensions *)
+  | TArrayInt -> "int[]"
 
 let rec print_fields ppf = function
   | [] -> fprintf ppf ""
@@ -50,10 +52,16 @@ let rec print_expr ppf = function
   | Strct l -> fprintf ppf "{ @[%a}@]" print_defs l
   | GetF(e, x) -> fprintf ppf "(%a).%s" print_expr e x
   | SetF(e1, x, e2) -> fprintf ppf "(%a).%s <- %a" print_expr e1 x print_expr e2
-  | Seq(e1, e2) -> fprintf ppf "%a; %a" print_expr e1 print_expr e2
+  | Seq(e1, e2) -> fprintf ppf "%a; @[%a@]" print_expr e1 print_expr e2
+  (* Extension *)
+  | ArrayInt(id, l) -> fprintf ppf "%s=%a" id print_array l
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l
+and print_array ppf = function 
+  | [] -> fprintf ppf ""
+  | n::s -> fprintf ppf "%a, %a" print_expr n print_array s
 
 let print_prog ppf prog =
   fprintf ppf "%a@.%a@." print_types prog.types print_expr prog.code
+
