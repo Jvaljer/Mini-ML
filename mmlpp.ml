@@ -13,6 +13,7 @@ let rec typ_to_string = function
   | TArrayInt -> "int[]"
   | TMatch -> "match"
   | TAnything -> "anything"
+  | TArray t -> Printf.sprintf "%s[]" (typ_to_string t) 
 
 let rec print_fields ppf = function
   | [] -> fprintf ppf ""
@@ -60,6 +61,7 @@ let rec print_expr ppf = function
   | MatchPossibility(e,e') -> fprintf ppf "| %a -> %a" print_expr e print_expr e'
   | MatchPattern(e,poss) -> fprintf ppf "match %a with \n %a" print_expr e print_match poss
   | Anything -> fprintf ppf "_"
+  | Array(id,t,l) -> fprintf ppf "%s:%s=%a" id (typ_to_string t) print_array l 
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l

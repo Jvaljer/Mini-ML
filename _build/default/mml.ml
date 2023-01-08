@@ -9,6 +9,7 @@ type typ =
   | TArrayInt 
   | TMatch
   | TAnything
+  | TArray of typ
   
 type strct = (string * typ * bool) list
 
@@ -46,10 +47,11 @@ type expr =
   | SetF  of expr * string * expr
   | Seq   of expr * expr
   (* extensions *)
-  | ArrayInt of string * (expr) list (* int list or expr list ??? *)
-  | MatchPattern of expr * (expr) list (* here the (expr) list is gonna be a 'MatchPossibility list' *)
+  | ArrayInt of string * (expr) list
+  | MatchPattern of expr * (expr) list
   | MatchPossibility of expr * expr 
   | Anything 
+  | Array of string * typ * (expr) list 
 
 type prog = {
     types: (string * strct) list;

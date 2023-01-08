@@ -12,6 +12,7 @@ type value =
   | VUnit
   | VPtr   of int
   | VArrayInt  of (int) list
+  | VArray of (value) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
@@ -34,6 +35,7 @@ let print_value = function
                      printing list
                    in
                    printList l 
+  | VArray _ -> Printf.printf ""
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -158,6 +160,15 @@ let eval_prog (p: prog): value =
                                   let _ = eval e env in 
                                   eval e' env 
       | Anything -> VUnit 
+      (* Uniform Arrays *)
+      | Array(_,_,l) ->  let rec store list r =
+                           ( match (list,r) with  
+                               | [],ret -> VArray ret
+                               | e::s,ret -> let v = eval e env in
+                                             store s (ret@[v]) )
+                         in
+                         store l [] 
+                                     
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

@@ -146,6 +146,16 @@ let type_prog prog =
                                 let _ = type_expr e' tenv in
                                 type_expr e tenv
     | Anything -> TAnything
+    (* Uniform Arrays *)
+    | Array(_,t,l) -> let rec arrayTypeCheck = function
+                         | [] -> TArray t
+                         | e::s -> let t' = type_expr e tenv in 
+                                   if t<>t' then 
+                                     error (Printf.sprintf "array is typed as %s but expr is typed as %s" (Mmlpp.typ_to_string t) (Mmlpp.typ_to_string t') )
+                                   else 
+                                     arrayTypeCheck s
+                       in
+                       arrayTypeCheck l 
   in
 
   type_expr prog.code TypEnv.empty

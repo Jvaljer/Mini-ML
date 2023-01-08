@@ -163,10 +163,12 @@ expr:
   | se=s_expr DOT f=IDENT LARROW e=expr 
                               { SetF(se, f, e) } (* s_expr.ident <- expr *)
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
-  | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET SEMI 
+  | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET  
                               { ArrayInt(id,elems) }
   | MATCH e=expr WITH possibilities=nonempty_list(matching) 
                               { MatchPattern(e,possibilities) } (* e is an expr and poss must be (expr*expr) list *)
+  | LET ARRAY COLON t=typ id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET
+                              { Array(id,t,elems) }
 ;
 
 matching:

@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/abel/JvaljerGit/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_fe292e_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_43c8b8_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -150,8 +150,12 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_fe292e_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl mmlpp.ml) > _build/default/.mmlcat.eobjs/mmlpp.ml.d
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Mmlpp.cmo -c -impl mmlpp.ml)
 $ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
+$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Mmlcat.cmx -c -impl mmlcat.ml)
+$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Mmlpp.cmx -c -impl mmlpp.ml)
 $ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Mmli.cmx -c -impl mmli.ml)
 $ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Typechecker.cmx -c -impl typechecker.ml)
+$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o mmlcat.exe .mmlcat.eobjs/native/dune__exe.cmx .mmlcat.eobjs/native/dune__exe__Mml.cmx .mmlcat.eobjs/native/dune__exe__Mmlparser.cmx .mmlcat.eobjs/native/dune__exe__Mmllexer.cmx .mmlcat.eobjs/native/dune__exe__Mmlpp.cmx .mmlcat.eobjs/native/dune__exe__Mmlcat.cmx)
 $ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o mmli.exe .mmlcat.eobjs/native/dune__exe.cmx .mmlcat.eobjs/native/dune__exe__Mml.cmx .mmlcat.eobjs/native/dune__exe__Interpreter.cmx .mmlcat.eobjs/native/dune__exe__Mmlparser.cmx .mmlcat.eobjs/native/dune__exe__Mmllexer.cmx .mmlcat.eobjs/native/dune__exe__Mmlpp.cmx .mmlcat.eobjs/native/dune__exe__Typechecker.cmx .mmlcat.eobjs/native/dune__exe__Mmli.cmx)

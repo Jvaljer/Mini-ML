@@ -158,12 +158,12 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       X       |   SetF bug    |
+Structures |    X    |    X     |       X       |      X        |
 Fix Point  |    X    |    X     |       X       |      X        |
 
 
 Extensions I added : 
-  Integer Arrays 
+  Integer Arrays (only declaration...)
   Matching Pattern 
   Correct Errors 
 

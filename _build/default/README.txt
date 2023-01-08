@@ -158,14 +158,14 @@ X : Done (quite sure)
 Arithmetic |    X    |    X     |       X       |      X        |
 Variables  |    X    |    X     |       X       |      X        |
 Functions  |    X    |    X     |       X       |      X        |
-Structures |    X    |    X     |       X       |   SetF bug    |
+Structures |    X    |    X     |       X       |      X        |
 Fix Point  |    X    |    X     |       X       |      X        |
 
 
-Extension I'm working on -> 
-  integers list declared as : let l = [0, 1, 2, 3, 4]
-  interpreted as IntList of (int) list
-  is it an expr or a s_expr ??? 
+Extensions I added : 
+  Integer Arrays (only declaration...)
+  Matching Pattern 
+  Correct Errors 
 
 ##### in-sighted Extensions #####
 
@@ -195,7 +195,7 @@ Matching pattern :(not any idea of how to do)
                                            then must check if all 'expr_i_consequence' is well typed ...
     intepreted as ? ==> intepreter.ml -  if 'expr' == 'expr_i" then 'expr_i_consequence' else 'expr_n_consequence' ? 
 
+Correct Errors implementation (shall not be very hard but seems important to do...) -> Tried to do it properly in the TypeChecker
 
-Tuple -> 2 same typed values (maybe not that interesting but why not)
-Correct Errors implementation (shall not be very hard but seems important to do...)
-Better printing (don't want to do that at all but might be better)
+
+Uniform Arrays ???
