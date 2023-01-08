@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/abel/JvaljerGit/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_f97200_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_b42e4a_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -150,8 +150,10 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f97200_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl typechecker.ml) > _build/default/.mmlcat.eobjs/typechecker.ml.d
-$ (cd _build/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I .mmlcat.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/byte/dune__exe__Typechecker.cmo -c -impl typechecker.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Mmli.cmx -c -impl mmli.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -I .mmlcat.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .mmlcat.eobjs/native/dune__exe__Typechecker.cmx -c -impl typechecker.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o mmli.exe .mmlcat.eobjs/native/dune__exe.cmx .mmlcat.eobjs/native/dune__exe__Mml.cmx .mmlcat.eobjs/native/dune__exe__Interpreter.cmx .mmlcat.eobjs/native/dune__exe__Mmlparser.cmx .mmlcat.eobjs/native/dune__exe__Mmllexer.cmx .mmlcat.eobjs/native/dune__exe__Mmlpp.cmx .mmlcat.eobjs/native/dune__exe__Typechecker.cmx .mmlcat.eobjs/native/dune__exe__Mmli.cmx)
+$ (cd _build/default && /usr/bin/menhir -v mmlparser.mly --base mmlparser --infer-write-query mmlparser__mock.ml.mock)
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl mmlparser__mock.ml.mock) > _build/default/.mmlcat.eobjs/mmlparser__mock.ml.mock.d
+$ (cd _build/.sandbox/1ed0c00f66bb1d64d225c43156500525/default && /usr/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .mmlcat.eobjs/byte -open Dune__exe -short-paths -i -impl mmlparser__mock.ml.mock) > _build/.sandbox/1ed0c00f66bb1d64d225c43156500525/default/mmlparser__mock.mli.inferred
+> File "mmlparser.mly", line 173, characters 48-73:
+> Error: This expression has type 'a * 'b
+>        but an expression was expected of type expr
+[2]

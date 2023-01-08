@@ -7,6 +7,7 @@ type typ =
   | TFun of typ * typ
   | TStrct of string
   | TArrayInt 
+  | TMatch
   
 type strct = (string * typ * bool) list
 
@@ -45,6 +46,8 @@ type expr =
   | Seq   of expr * expr
   (* extensions *)
   | ArrayInt of string * (expr) list (* int list or expr list ??? *)
+  | MatchPattern of expr * (expr * expr) list
+  | Anything 
 
 type prog = {
     types: (string * strct) list;

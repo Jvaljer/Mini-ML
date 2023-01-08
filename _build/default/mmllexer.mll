@@ -31,6 +31,8 @@
         "true", BOOL(true);
         "false", BOOL(false);
         "array", ARRAY;
+        "match", MATCH;
+        "with", WITH;
       ] ;
     fun s ->
       try  Hashtbl.find h s
@@ -86,6 +88,9 @@ rule token = parse
   | "["  { LBRACKET }
   | "]"  { RBRACKET }
   | ","  { COMMA }
+  (*match pattern*)
+  | "|"  { SELECT }
+  | "_"  { ANYTHING }
   (*any other word/character + EOF*)
   | _    { raise (Lexing_error ("unknown character : " ^ (lexeme lexbuf))) }
   | eof  { EOF }

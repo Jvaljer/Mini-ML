@@ -137,12 +137,24 @@ let eval_prog (p: prog): value =
                             | _ -> assert false ) 
       (* Integer Array *)
       | ArrayInt(_,l) -> let rec storeArray list ret =
-                            match list with 
-                              | [] -> VArrayInt ret
-                              | (Int n)::s -> storeArray s (n::ret)
-                              | _ -> assert false 
+                            ( match list with 
+                                | [] -> VArrayInt ret
+                                | (Int n)::s -> storeArray s (n::ret)
+                                | _ -> assert false )
                           in
                           storeArray l []
+      (* Matching Pattern *)
+      | MatchPattern(e, l) -> let eval_e = eval e env in 
+                              let rec match_expr list = 
+                                ( match list with 
+                                    | [] -> assert false 
+                                    | (e_i, e_cons)::s -> let eval_e_i = eval e_i env in 
+                                                          if eval_e = eval_e_i then eval e_cons env
+                                                          else match_expr s
+                                    | _ -> assert false )
+                              in
+                              match_expr l 
+      | Anything -> VUnit 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

@@ -128,6 +128,20 @@ let type_prog prog =
                                     arrayTypeCheck s
                         in
                         arrayTypeCheck l
+    (* Matching Pattern *)
+    | MatchPattern(e, l) -> (* what we wanna test, is if all first eleme of l's tuple has same type with e *)
+                            let type_e = type_expr e tenv in 
+                            let rec test_type_expr = function
+                              | [] -> TMatch 
+                              | (e_i, e_cons)::s -> ( match e_i with 
+                                                        | Anything -> type_expr e_cons; test_type_expr s 
+                                                        | _ -> let type_e_i = type_expr e_i tenv in 
+                                                               if type_e_i <> type_e then assert false 
+                                                               else type_expr e_cons tenv; test_type_expr s )
+                              | _ -> assert false 
+                            in
+                            test_type_expr l 
+    | Anything -> TUnit
   in
 
   type_expr prog.code TypEnv.empty

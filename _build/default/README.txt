@@ -171,7 +171,7 @@ Extension I'm working on ->
 
 Int Arrays : (first overall idea)
     as an expr ? ==> mml.ml -  ArrayInt of string * (int/expr) list
-    recognize as ? ==> mmlparser.mly -  let array l = [int,int,int, ... ,];
+    recognized as ? ==> mmlparser.mly -  let array l = [int,int,int, ... ,];
                                         LET ARRAY id=IDENT ASS LBRACKET elems=list_elm RBRACKET SEMI { ArrayInt(id,elems) }
                                         list_elm: | n=CST COMMA { Int(n) } (*how to make the last elem without comma ?*)
     typechecked as ? ==> typechecker.ml -  must check for each element in 'elems' if it's well typed TInt 
@@ -182,7 +182,20 @@ Int Arrays : (first overall idea)
 
     ANOTHER COMPLETION :: maybe could add something to get a special element ? like GetI, how to do ???
 
+
+Matching pattern :(not any idea of how to do)
+    as an expr for sure ==> mml.ml -  MatchPattern of expr * (expr) list * (expr) list * expr ??? 
+    recognized as ? ==> mmlparser.mly -  match 'expr' with 
+                                         | 'expr_bis' -> 'expr_bis_consequence'
+                                         ...
+                                         | 'expr_n-1' -> 'expr_n-1_consequence' 
+                                         | '_' -> 'expr_n_consequence'
+    typechecked as ? ==> typechecker.ml -  must check if 'expr' is of same type as all 'expr_bis' -> 'expr_n' ? 
+                                           '_' expr is needed to be associated to 'expr_n' !
+                                           then must check if all 'expr_i_consequence' is well typed ...
+    intepreted as ? ==> intepreter.ml -  if 'expr' == 'expr_i" then 'expr_i_consequence' else 'expr_n_consequence' ? 
+
+
 Tuple -> 2 same typed values (maybe not that interesting but why not)
-Matching pattern ?? (seems complicated)
 Correct Errors implementation (shall not be very hard but seems important to do...)
 Better printing (don't want to do that at all but might be better)

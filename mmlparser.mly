@@ -28,10 +28,15 @@
 %token DOT COLON SEMI LARROW RARROW ASS 
 (*parenthesis*)
 %token LPAR RPAR LBRACE RBRACE
-(*lists*)
+(*arrays*)
 %token LBRACKET RBRACKET
 %token ARRAY
 %token COMMA
+(*match pattern*)
+%token MATCH 
+%token WITH 
+%token SELECT
+%token ANYTHING
 (*End Of File*)
 %token EOF
 
@@ -160,6 +165,13 @@ expr:
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
   | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET SEMI 
                               { ArrayInt(id,elems) }
+  | MATCH test=expr WITH possibilities=nonempty_list(matching) 
+                              { MatchPattern(test,possibilities) }
+;
+
+matching:
+  | SELECT e_i=expr RARROW e_i_consequence=expr { (e_i,e_i_consequence) }
+  | SELECT ANYTHING { Anything }
 ;
 
 list_elem:
