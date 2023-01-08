@@ -34,6 +34,7 @@ type luop =
 
 type lbop = 
   | Concat 
+  | EqL
 
 type expr =
   | Int   of int

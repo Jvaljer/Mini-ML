@@ -1,9 +1,9 @@
-# dune test
+# dune build
 # OCAMLPARAM: unset
 # Shared cache: disabled
 # Workspace root: /home/abel/JvaljerGit/Mini-ML
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_338e7f_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_36491f_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"

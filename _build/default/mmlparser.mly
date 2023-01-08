@@ -211,3 +211,4 @@ fun_arg:
 
 %inline l_binop:
   | CONCAT { Concat }
+  | EQ { EqL }

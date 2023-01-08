@@ -156,6 +156,12 @@ let type_prog prog =
                                                            else
                                                              TArray t 
                                   | t_err,t_err' -> error (Printf.sprintf "at least one of the 2 list isn't well Array typed : %s %s" (Mmlpp.typ_to_string t_err) (Mmlpp.typ_to_string t_err')) )
+    | ListBop(EqL,l,l') -> ( match type_expr l tenv, type_expr l' tenv with 
+                               | TArray t, TArray t' -> if t<>t' then 
+                                                          error (Printf.sprintf "both list aren't same typed -> %s <> %s" (Mmlpp.typ_to_string t) (Mmlpp.typ_to_string t'))
+                                                        else
+                                                          TBool 
+                               | t_err,t_err' -> error (Printf.sprintf "at least one of the 2 list isn't well Array typed : %s %s" (Mmlpp.typ_to_string t_err) (Mmlpp.typ_to_string t_err')))
   in
 
   type_expr prog.code TypEnv.empty

@@ -42,6 +42,7 @@ let luop_to_string = function
   | Len -> "len"
 let lbop_to_string = function
   | Concat -> "@"
+  | EqL -> "="
 
 let rec print_expr ppf = function
   | Int n -> fprintf ppf "%i" n

@@ -180,6 +180,17 @@ let eval_prog (p: prog): value =
                                                                    Hashtbl.add mem ptr (VArray(id, l@l', env));
                                                                    VPtr p
                                           | _ -> assert false )
+      | ListBop(EqL,l_id,l_id') -> ( match eval l_id env, eval l_id' env with
+                                       | VPtr ptr, VPtr ptr' -> let (_,l,_) = findArrayInfo ptr in
+                                                                let (_,l',_) = findArrayInfo ptr' in
+                                                                let rec equality = function
+                                                                  | [],[] -> VBool(true)
+                                                                  | e::s,e'::s' -> if e=e' then equality (s,s')
+                                                                                   else VBool(false)
+                                                                  | _,_ -> assert false
+                                                                in
+                                                                equality (l,l')
+                                       | _,_ -> assert false )
                              
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
