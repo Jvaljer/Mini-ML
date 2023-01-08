@@ -11,6 +11,7 @@ let rec typ_to_string = function
   | TStrct s -> s
   (* Extensions *)
   | TArrayInt -> "int[]"
+  | TMatch -> "match"
 
 let rec print_fields ppf = function
   | [] -> fprintf ppf ""
@@ -55,13 +56,18 @@ let rec print_expr ppf = function
   | Seq(e1, e2) -> fprintf ppf "%a; @[%a@]" print_expr e1 print_expr e2
   (* Extension *)
   | ArrayInt(id, l) -> fprintf ppf "%s=%a" id print_array l
+  | MatchPossibility(e,e') -> fprintf ppf "| %a -> %a" print_expr e print_expr e'
+  | MatchPattern(e,poss) -> fprintf ppf "match %a with \n %a" print_expr e print_match poss
+  | Anything -> fprintf ppf "_"
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l
 and print_array ppf = function 
   | [] -> fprintf ppf ""
   | n::s -> fprintf ppf "%a, %a" print_expr n print_array s
-
+and print_match ppf = function
+  | [] -> fprintf ppf "\n"
+  | m::s -> fprintf ppf "\n %a %a" print_expr m print_match s
 let print_prog ppf prog =
   fprintf ppf "%a@.%a@." print_types prog.types print_expr prog.code
 

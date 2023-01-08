@@ -1,0 +1,70 @@
+type token =
+    WITH
+  | TYPE
+  | TUNIT
+  | TINT
+  | THEN
+  | TBOOL
+  | SEMI
+  | SELECT
+  | RPAR
+  | REC
+  | RBRACKET
+  | RBRACE
+  | RARROW
+  | PLUS
+  | PARS
+  | OR
+  | NOT
+  | NEQ
+  | NEG
+  | MUTABLE
+  | MUL
+  | MOD
+  | MINUS
+  | MATCH
+  | LT
+  | LPAR
+  | LET
+  | LE
+  | LBRACKET
+  | LBRACE
+  | LARROW
+  | IN
+  | IF
+  | IDENT of string
+  | FUN
+  | EQ
+  | EOF
+  | ELSE
+  | DOT
+  | DIV
+  | CST of int
+  | COMMA
+  | COLON
+  | BOOL of bool
+  | ASS
+  | ARRAY
+  | ANYTHING
+  | AND
+val menhir_begin_marker : int
+val xv_unop : Mml.uop
+val xv_type_def_arg : string * Mml.typ * bool
+val xv_type_def : string * Mml.strct
+val xv_typ : Mml.typ
+val xv_s_expr : Mml.expr
+val xv_program : Mml.prog
+val xv_option_MUTABLE_ : unit option
+val xv_nonempty_list_type_def_arg_ : Mml.strct
+val xv_nonempty_list_matching_ : Mml.expr list
+val xv_nonempty_list_id_def_ : (string * Mml.expr) list
+val xv_matching : Mml.expr
+val xv_list_elem : Mml.expr
+val xv_list_type_def_ : (string * Mml.strct) list
+val xv_list_list_elem_ : Mml.expr list
+val xv_list_fun_arg_ : (string * Mml.typ) list
+val xv_id_def : string * Mml.expr
+val xv_fun_arg : string * Mml.typ
+val xv_expr : Mml.expr
+val xv_binop : Mml.bop
+val menhir_end_marker : int

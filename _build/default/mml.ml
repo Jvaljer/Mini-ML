@@ -46,7 +46,8 @@ type expr =
   | Seq   of expr * expr
   (* extensions *)
   | ArrayInt of string * (expr) list (* int list or expr list ??? *)
-  | MatchPattern of expr * (expr * expr) list
+  | MatchPattern of expr * (expr) list (* here the (expr) list is gonna be a 'MatchPossibility list' *)
+  | MatchPossibility of expr * expr 
   | Anything 
 
 type prog = {

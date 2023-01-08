@@ -133,14 +133,17 @@ let type_prog prog =
                             let type_e = type_expr e tenv in 
                             let rec test_type_expr = function
                               | [] -> TMatch 
-                              | (e_i, e_cons)::s -> ( match e_i with 
-                                                        | Anything -> type_expr e_cons; test_type_expr s 
-                                                        | _ -> let type_e_i = type_expr e_i tenv in 
-                                                               if type_e_i <> type_e then assert false 
-                                                               else type_expr e_cons tenv; test_type_expr s )
-                              | _ -> assert false 
+                              | m::s -> ( match m with 
+                                            | MatchPossibility(_,_) -> let type_ei = type_expr m tenv in
+                                                                       if type_ei <> type_e then assert false 
+                                                                       else 
+                                                                         test_type_expr s 
+                                            | _ -> assert false )
                             in
-                            test_type_expr l 
+                            test_type_expr l
+    | MatchPossibility(e,e') -> (* for each possibility we want it to typecheck the consequence & return the type of the matchign expr *)
+                                let _ = type_expr e' tenv in
+                                type_expr e tenv
     | Anything -> TUnit
   in
 

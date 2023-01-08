@@ -148,12 +148,15 @@ let eval_prog (p: prog): value =
                               let rec match_expr list = 
                                 ( match list with 
                                     | [] -> assert false 
-                                    | (e_i, e_cons)::s -> let eval_e_i = eval e_i env in 
+                                    | MatchPossibility(e_i,e_cons)::s -> let eval_e_i = eval e_i env in 
                                                           if eval_e = eval_e_i then eval e_cons env
-                                                          else match_expr s
+                                                          else match_expr s 
                                     | _ -> assert false )
                               in
                               match_expr l 
+      | MatchPossibility(e,e') -> (* here we just want to make sure both expr are well evaluated *)
+                                  let _ = eval e env in 
+                                  eval e' env 
       | Anything -> VUnit 
 
   (* Interpreting the Expr when it's supposed to be an Integer *)

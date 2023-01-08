@@ -2,12 +2,14 @@
 (* The type of tokens. *)
 
 type token = 
+  | WITH
   | TYPE
   | TUNIT
   | TINT
   | THEN
   | TBOOL
   | SEMI
+  | SELECT
   | RPAR
   | REC
   | RBRACKET
@@ -23,6 +25,7 @@ type token =
   | MUL
   | MOD
   | MINUS
+  | MATCH
   | LT
   | LPAR
   | LET
@@ -45,6 +48,7 @@ type token =
   | BOOL of (bool)
   | ASS
   | ARRAY
+  | ANYTHING
   | AND
 
 (* This exception is raised by the monolithic API functions. *)

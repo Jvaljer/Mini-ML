@@ -165,12 +165,13 @@ expr:
   | e1=expr SEMI e2=expr      { Seq(e1, e2) } (* expr ; expr *)
   | LET ARRAY id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET SEMI 
                               { ArrayInt(id,elems) }
-  | MATCH test=expr WITH possibilities=nonempty_list(matching) 
-                              { MatchPattern(test,possibilities) }
+  | MATCH e=expr WITH possibilities=nonempty_list(matching) 
+                              { MatchPattern(e,possibilities) } (* e is an expr and poss must be (expr*expr) list *)
 ;
 
 matching:
-  | SELECT e_i=expr RARROW e_i_consequence=expr { (e_i,e_i_consequence) }
+  | SELECT e_i=expr RARROW e_i_consequence=expr 
+                    { MatchPossibility(e_i,e_i_consequence) } (* here we have type 'a * 'b but we want type expr ??? *)
   | SELECT ANYTHING { Anything }
 ;
 
