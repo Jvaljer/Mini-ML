@@ -29,6 +29,7 @@ type token =
   | LT
   | LPAR
   | LET
+  | LEN
   | LE
   | LBRACKET
   | LBRACE

@@ -115,7 +115,7 @@ let type_prog prog =
                             | t_err -> error (Printf.sprintf "the expr isn't matching TStrct, it's typed as %s" (Mmlpp.typ_to_string t_err)) )
     (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
-                     type_expr e' tenv; 
+                    type_expr e' tenv; 
     (* Fix Point *)
     | Fix(f, t, e) -> let env = TypEnv.add f t tenv in
                       type_expr e env (* here we just check if inside e restrained environment (which expr belongs to) expr has the right type *)
@@ -156,6 +156,9 @@ let type_prog prog =
                                      arrayTypeCheck s
                        in
                        arrayTypeCheck l 
+    | ListUop(Len,l) -> ( match type_expr l tenv with 
+                            | TArray _ -> TInt 
+                            | t_err -> error (Printf.sprintf "expr is not a list, typed as %s" (Mmlpp.typ_to_string t_err)) )
   in
 
   type_expr prog.code TypEnv.empty

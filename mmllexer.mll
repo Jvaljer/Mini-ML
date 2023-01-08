@@ -33,6 +33,7 @@
         "array", ARRAY;
         "match", MATCH;
         "with", WITH;
+        "len", LEN;
       ] ;
     fun s ->
       try  Hashtbl.find h s

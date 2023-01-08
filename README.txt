@@ -166,6 +166,7 @@ Extensions I added :
   Integer Arrays (only declaration...)
   Matching Pattern 
   Correct Errors 
+  Uniform Arrays (only declaration...)
 
 ##### in-sighted Extensions #####
 

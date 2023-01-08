@@ -30,6 +30,9 @@ type bop =
   | And 
   | Or
 
+type luop =
+  | Len
+
 type expr =
   | Int   of int
   | Bool  of bool
@@ -48,10 +51,11 @@ type expr =
   | Seq   of expr * expr
   (* extensions *)
   | ArrayInt of string * (expr) list
+  | Array of string * typ * (expr) list
+  | ListUop of luop * expr
   | MatchPattern of expr * (expr) list
   | MatchPossibility of expr * expr 
-  | Anything 
-  | Array of string * typ * (expr) list 
+  | Anything  
 
 type prog = {
     types: (string * strct) list;

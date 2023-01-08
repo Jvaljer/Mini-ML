@@ -12,12 +12,12 @@ type value =
   | VUnit
   | VPtr   of int
   | VArrayInt  of (int) list
-  | VArray of (value) list
 
 (* Heap-Values (only used for structures & functions) *)
 type heap_value =
   | VClos  of string * expr * value Env.t
   | VStrct of (string, value) Hashtbl.t
+  | VArray of string * (value) list * value Env.t
 
 (* string rending values (printing them)*)
 let print_value = function
@@ -34,8 +34,7 @@ let print_value = function
                      in 
                      printing list
                    in
-                   printList l 
-  | VArray _ -> Printf.printf ""
+                   printList l
 
 (* Whole Mini-ML program interpret *)
 let eval_prog (p: prog): value =
@@ -56,6 +55,12 @@ let eval_prog (p: prog): value =
         | _ -> assert false 
   in
   
+  let findArray ptr = 
+      match Hashtbl.find mem ptr with 
+        | VArray(_,l,_) -> l
+        | _ -> assert false
+  in
+
   (* Interpreting a special Expr, consideratibg the environment + memory within which we wanna interpret it *)
   let rec eval (e: expr) (env: value Env.t): value = 
     match e with
@@ -161,14 +166,25 @@ let eval_prog (p: prog): value =
                                   eval e' env 
       | Anything -> VUnit 
       (* Uniform Arrays *)
-      | Array(_,_,l) ->  let rec store list r =
-                           ( match (list,r) with  
-                               | [],ret -> VArray ret
-                               | e::s,ret -> let v = eval e env in
-                                             store s (ret@[v]) )
-                         in
-                         store l [] 
-                                     
+      | Array(id,_,l) -> let rec store list r =
+                          ( match (list,r) with  
+                              | [],ret -> let ptr = new_ptr () in
+                                          Hashtbl.add mem ptr (VArray(id,ret,env));
+                                          VPtr ptr
+                              | e::s,ret -> let v = eval e env in
+                                            store s (ret@[v]) )
+                        in
+                        store l [] 
+      | ListUop(Len,l_id) -> ( match eval l_id env with
+                                 | VPtr ptr -> let l = findArray ptr in
+                                               let rec length cpt list =
+                                                 ( match list with
+                                                     | [] -> VInt cpt 
+                                                     | _::s -> length (cpt+1) s )
+                                               in
+                                               length 0 l
+                                 | _ -> assert false )
+                             
 
   (* Interpreting the Expr when it's supposed to be an Integer *)
   and evalInt (e: expr) (env: value Env.t): int = 

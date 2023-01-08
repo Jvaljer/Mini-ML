@@ -32,6 +32,7 @@
 %token LBRACKET RBRACKET
 %token ARRAY
 %token COMMA
+%token LEN
 (*match pattern*)
 %token MATCH 
 %token WITH 
@@ -83,8 +84,6 @@
 %nonassoc PARS IDENT CST BOOL 
 %left SEMI
 %nonassoc LARROW
-
-
 
 
 %start program
@@ -169,6 +168,7 @@ expr:
                               { MatchPattern(e,possibilities) } (* e is an expr and poss must be (expr*expr) list *)
   | LET ARRAY COLON t=typ id=IDENT ASS LBRACKET elems=list(list_elem) RBRACKET
                               { Array(id,t,elems) }
+  | op=l_unop l=s_expr          { ListUop(op,l) }
 ;
 
 matching:
@@ -205,3 +205,5 @@ fun_arg:
   | OR    { Or } (* || *)
 ;
 
+%inline l_unop:
+  | LEN   { Len }

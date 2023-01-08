@@ -39,6 +39,8 @@ let bop_to_string = function
   | Le  -> "<="
   | And -> "&&"
   | Or  -> "||"
+let luop_to_string = function
+  | Len -> "len"
 
 let rec print_expr ppf = function
   | Int n -> fprintf ppf "%i" n
@@ -62,6 +64,7 @@ let rec print_expr ppf = function
   | MatchPattern(e,poss) -> fprintf ppf "match %a with \n %a" print_expr e print_match poss
   | Anything -> fprintf ppf "_"
   | Array(id,t,l) -> fprintf ppf "%s:%s=%a" id (typ_to_string t) print_array l 
+  | ListUop(op,id) -> fprintf ppf "%s(%a)" (luop_to_string op) print_expr id
 and print_defs ppf = function
   | [] -> fprintf ppf ""
   | (x, e) :: l -> fprintf ppf "%s = %a; %a" x print_expr e print_defs l
