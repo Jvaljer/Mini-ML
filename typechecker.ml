@@ -18,7 +18,7 @@ let type_error ty_actual ty_expected =
 let rec findStruct strct_id list env = 
   (* with this function we wanna found the associated struct to teh struct_name 'strct_id' *)
   match list with 
-    | [] -> assert false
+    | [] -> error (Printf.sprintf "struct %s doesn't exists" strct_id)
     | (id,values)::strct -> if id=strct_id 
                               then values 
                             else 
@@ -63,11 +63,11 @@ let type_prog prog =
     | App(f, f') -> (* App() is the application of a function inside a function *)
                      ( match type_expr f tenv with 
                         | TFun(t,t') -> check f' t tenv; t' (* we want f2 to be well-typed as an f1 argument*)
-                        | _ -> assert false ) 
+                        | t_err -> error (Printf.sprintf "the type of this expr is %s, it's not a function" (Mmlpp.typ_to_string t_err)) ) 
     (* Structures *)
     | Strct s -> let rec checkStruct = function
-                   (* if the prog types are empty then nothing *)
-                   | [] -> assert false 
+                   (* if the prog types are empty then print it *)
+                   | [] -> error (Printf.sprintf "struct hasn't led to make a TStrct")
                    (* else we are gonna test if the expr given to the id is well typed *)
                    | (s_name,s_values)::l -> ( let rec typeCheckStruct = function
                                                  (* if both are empty that's because we went through well -> all is well typed so just return the struct as a whole TypeStruct*)
@@ -98,8 +98,8 @@ let type_prog prog =
                                            check e t tenv;
                                            TUnit
                                        with 
-                                         Not_found -> assert false )   
-                       | _ -> assert false )
+                                         Not_found -> error (Printf.sprintf "%s isn't a struct (not in the list...)" f )) 
+                       | t_err ->  error (Printf.sprintf "expr is typed as %s but not as a struct" (Mmlpp.typ_to_string t_err)) )
     | SetF(e, f, e') -> (* same as GetF but with specifications -> we wanna check the second expr too & add the 'mutable' possibility *)
                         ( match type_expr e tenv with
                             | TStrct strct -> ( let s = findStruct strct prog.types tenv in
@@ -109,10 +109,10 @@ let type_prog prog =
                                                     if mut 
                                                       then TUnit 
                                                     else 
-                                                      assert false 
+                                                      error (Printf.sprintf "%s.%s isn't a mutable" strct f ) 
                                                   with 
-                                                    Not_found -> assert false )
-                            | _ -> assert false )
+                                                    Not_found -> error (Printf.sprintf "%s isn't in the struct" f ) )
+                            | t_err -> error (Printf.sprintf "the expr isn't matching TStrct, it's typed as %s" (Mmlpp.typ_to_string t_err)) )
     (* Sequence *)
     | Seq(e, e') -> let _ = type_expr e tenv in
                      type_expr e' tenv; 
@@ -129,22 +129,23 @@ let type_prog prog =
                         in
                         arrayTypeCheck l
     (* Matching Pattern *)
-    | MatchPattern(e, l) -> (* what we wanna test, is if all first eleme of l's tuple has same type with e *)
+    | MatchPattern(e, l) -> (* here, we want to test if in the possibilities list there's AT LEAST on 'Anything' or one 'same typed' expr *)
                             let type_e = type_expr e tenv in 
                             let rec test_type_expr = function
-                              | [] -> TMatch 
+                              | [] -> error (Printf.sprintf "there isn't any possible match in this pattern" ) 
                               | m::s -> ( match m with 
-                                            | MatchPossibility(_,_) -> let type_ei = type_expr m tenv in
-                                                                       if type_ei <> type_e then assert false 
-                                                                       else 
-                                                                         test_type_expr s 
-                                            | _ -> assert false )
+                                            | MatchPossibility(_,_) -> (* here we wanna say 'OK' if e_i is typed as TAnything or type_e *)
+                                                                          ( match type_expr m tenv with (* for that we use the type_expr of m which returns the e_i type *)
+                                                                              | TAnything -> TMatch 
+                                                                              | type_m -> if type_e=type_m then TMatch
+                                                                                          else test_type_expr s )
+                                            | _ -> error (Printf.sprintf "the wanted match doesn't belongs in our pattern") )
                             in
                             test_type_expr l
     | MatchPossibility(e,e') -> (* for each possibility we want it to typecheck the consequence & return the type of the matchign expr *)
                                 let _ = type_expr e' tenv in
                                 type_expr e tenv
-    | Anything -> TUnit
+    | Anything -> TAnything
   in
 
   type_expr prog.code TypEnv.empty

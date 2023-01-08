@@ -12,6 +12,7 @@ let rec typ_to_string = function
   (* Extensions *)
   | TArrayInt -> "int[]"
   | TMatch -> "match"
+  | TAnything -> "anything"
 
 let rec print_fields ppf = function
   | [] -> fprintf ppf ""

@@ -8,6 +8,7 @@ type typ =
   | TStrct of string
   | TArrayInt 
   | TMatch
+  | TAnything
   
 type strct = (string * typ * bool) list
 
